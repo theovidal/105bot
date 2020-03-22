@@ -17,6 +17,7 @@ require_relative 'commands/commands'
 require_relative 'commands/add'
 require_relative 'commands/show'
 require_relative 'commands/refresh'
+require_relative 'commands/hide'
 require_relative 'lib/data'
 require_relative 'lib/models'
 
