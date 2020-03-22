@@ -10,14 +10,5 @@ module Coronagenda
         output << "#{assignment[:link]}\n" if assignment[:link] != ''
       end
     end
-
-    class Messages < Sequel::Model
-      def self.prettify(message)
-        date = Time.at(message[:date])
-        days = date.day.digits
-        output = "**――――――――――――――――――――**\n"
-        output << "**:calendar_spiral: #{DAYS[date.wday]} #{EMOJI_DAYS[days[1]]}#{EMOJI_DAYS[days[0]]} #{MONTHS[date.month]}**\n\n"
-      end
-    end
   end
 end

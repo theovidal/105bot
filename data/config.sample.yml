@@ -1,6 +1,6 @@
 bot:
   token: Bot's token
-  prefix: agenda
+  prefix: 'a:'
 db:
   path: ./testing.sqlite
 server:
