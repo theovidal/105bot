@@ -6,7 +6,7 @@ $bot = Discordrb::Bot.new token: 'NjkwOTA0ODkxOTI5MTMzMTkw.XnYrOw.LaFum0In7MgwYT
 
 require_relative 'commands/commands'
 require_relative 'commands/add'
-require_relative 'commands/generate'
+require_relative 'commands/show'
 require_relative 'commands/refresh'
 require_relative 'lib/data'
 require_relative 'lib/models'

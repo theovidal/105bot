@@ -3,7 +3,7 @@ module Coronagenda
     LIST = {
       'refresh' => -> (_) { refresh },
       'add' => -> (args) { add(args) },
-      'generate' => -> (args) { generate(args) }
+      'show' => -> (args) { show(args) }
     }
   end
 end

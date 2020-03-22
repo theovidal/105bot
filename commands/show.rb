@@ -1,7 +1,7 @@
 module Coronagenda
   module Commands
-    def Commands.generate(args)
-      waiter = $bot.send_message(690904527423012873, ':inbox_tray: *Génération en cours, veuillez patienter...*')
+    def Commands.show(args)
+      waiter = $bot.send_message(690904527423012873, ':inbox_tray: *Affichage en cours, veuillez patienter...*')
 
       last = Models::Messages.last
       args[0].to_i.times do |i|
