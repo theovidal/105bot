@@ -5,7 +5,9 @@ module Coronagenda
         content = ''
         content << Models::Messages.prettify(message)
 
-        assignments = Models::Assignments.all.select{|a| a[:date] > message[:date] && a.date <= message[:date] + 86400 }
+        assignments = Models::Assignments.all.select do |a|
+          a[:date] > message[:date] && a.date <= message[:date] + 86400
+        end
 
         homework = ''
         events = ''
@@ -24,7 +26,7 @@ module Coronagenda
         content << "__:incoming_envelope: Événements :__\n#{events}\n"
         content << "__:clipboard: Devoirs :__\n#{homework}"
 
-        $bot.channel(690904527423012873).message(message[:discord_id]).edit(content)
+        $bot.channel($config['server']['output_channel']).message(message[:discord_id]).edit(content)
       end
     end
   end

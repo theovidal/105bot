@@ -1,3 +1,5 @@
 .vscode
 .idea
 *.sqlite
+data/config.yml
+data/subjects.yml

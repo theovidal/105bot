@@ -1,19 +1,4 @@
 module Coronagenda
-  SUBJECTS = {
-    'french' => {
-      name: 'Français',
-      emoji: 'books'
-    },
-    'maths' => {
-      name: 'Mathématiques',
-      emoji: '1234'
-    },
-    'geography' => {
-      name: 'Géographie',
-      emoji: 'earth_americas'
-    }
-  }
-
   EMOJI_DAYS = {
     1 => ':one:',
     2 => ':two:',

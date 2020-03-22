@@ -1,0 +1,9 @@
+bot:
+  token: Bot's token
+  prefix: agenda
+db:
+  path: ./testing.sqlite
+server:
+  role: Manager role's ID
+  output_channel: Channel to output agenda
+  commands_channel: Channel where to execute commands

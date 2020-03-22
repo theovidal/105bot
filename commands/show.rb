@@ -1,12 +1,12 @@
 module Coronagenda
   module Commands
-    def Commands.show(args)
-      waiter = $bot.send_message(690904527423012873, ':inbox_tray: *Affichage en cours, veuillez patienter...*')
+    def Commands.show(context, args)
+      waiter = context.send_message(':inbox_tray: *Affichage en cours, veuillez patienter...*')
 
       last = Models::Messages.last
       args[0].to_i.times do |i|
         date = last[:date] + (60 * 60 * 24 * (i + 1))
-        discord = $bot.send_message(690904527423012873, date)
+        discord = $bot.send_message($config['server']['output_channel'], date)
 
         Models::Messages.create do |message|
           message.date = date
