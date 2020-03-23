@@ -14,7 +14,7 @@ require_relative 'core'
 client = Discordrb::Bot.new(token: $config['bot']['token'])
 
 client.message(start_with: $config['bot']['prefix']) do |event|
-  args = event.content.split(" ")
+  args = event.content.gsub("\n", '\\n').split(" ")
   command_name = args[0].delete_prefix($config['bot']['prefix'])
   $bot.handle_command(command_name, args[1..], event)
 end
@@ -26,4 +26,3 @@ client.ready do
 end
 
 client.run
-
