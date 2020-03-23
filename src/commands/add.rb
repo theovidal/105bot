@@ -3,7 +3,7 @@ require_relative 'command'
 module Coronagenda
   module Commands
     class Add < Command
-      DESCRIPTION = "Ajouter un devoir ou un événement. S'il n'y a pas de lien ou d'heure de rendu, préciser `0` dans les champs correspondants."
+      DESC = "Ajouter un devoir ou un événement. S'il n'y a pas de lien ou d'heure de rendu, préciser `0` dans les champs correspondants."
       USAGE = 'add <jour> <mois> <heure> <matière> <type> <lien> <texte...>'
 
       def self.parse_args(args)
@@ -19,7 +19,10 @@ module Coronagenda
       end
 
       def self.exec(context, args)
-        context.send_message(":incoming_envelope: *Ajout du devoir/événement, veuillez patienter...*")
+        pretty_type = args[:type] == 'homework' ? 'du devoir' : "de l'événement"
+        waiter = context.send_embed('', Utils.embed(
+          description: ":incoming_envelope: Ajout #{pretty_type} à l'agenda, veuillez patienter..."
+        ))
 
         date = Time.new(2020, args[:month], args[:day], args[:hour])
         Models::Assignments.create do |assignment|
@@ -32,8 +35,9 @@ module Coronagenda
         end
 
         Models::Messages.refresh(context, Models::Messages.from_day([args[:day], args[:month]]))
-        context.send_message(":white_check_mark: *Devoir/Événement ajouté à l'agenda.*
-          `Vous ne le voyez pas ? Essayez d'afficher davantage de jours via la commande show !`")
+        waiter.edit('', Utils.embed(
+          description: ":white_check_mark: Ajout #{pretty_type} à l'agenda effectué.\n*Vous ne le voyez pas ? Essayez d'afficher davantage de jours via la commande `a:show` !*"
+        ))
       end
     end
   end

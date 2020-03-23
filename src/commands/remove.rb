@@ -3,7 +3,7 @@ require_relative 'command'
 module Coronagenda
   module Commands
     class Remove < Command
-      DESCRIPTION = "Retirer un devoir ou un événement"
+      DESC = "Retirer un devoir ou un événement"
       USAGE = "remove <jour> <mois> <type> <numéro>"
 
       def self.parse_args(args)
@@ -16,13 +16,19 @@ module Coronagenda
       end
 
       def self.exec(context, args)
-        context.send_message(':wastebasket: *Suppression du devoir, veuillez patienter...*')
+        pretty_type = args[:type] == 'homework' ? 'du devoir' : "de l'événement"
+        waiter = context.send_embed('', Utils.embed(
+          description: ":wastebasket: Suppression #{pretty_type} de l'agenda, veuillez patienter..."
+        ))
+
         assignments =
           Models::Assignments.from_day([args[:day], args[:month]]).select{|a| a.type == args[:type]}
-
         assignments[args[:index]].delete
         Models::Messages.refresh(context, Models::Messages.from_day([args[:day], args[:month]]))
-        context.send_message(':white_check_mark: *Devoir supprimé*')
+
+        waiter.edit('', Utils.embed(
+          description: ":white_check_mark: Suppression #{pretty_type} de l'agenda effectué."
+        ))
       end
     end
   end

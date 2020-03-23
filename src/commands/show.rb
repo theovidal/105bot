@@ -3,7 +3,7 @@ require_relative 'command'
 module Coronagenda
   module Commands
     class Show < Command
-      DESCRIPTION = "Montrer l'agenda pour les x jours suivants le dernier message"
+      DESC = "Montrer l'agenda pour les x jours suivants le dernier message"
       USAGE = 'show <x>'
 
       def self.parse_args(args)
@@ -13,7 +13,10 @@ module Coronagenda
       end
 
       def self.exec(context, args)
-        context.send_message(':inbox_tray: *Affichage en cours, veuillez patienter...*')
+        add_str = args[:number] == 1 ? "d'un jour supplémentaire" : "de #{args[:number]} jours supplémentaires"
+        waiter = context.send_embed('', Utils.embed(
+          description: ":inbox_tray: Affichage #{add_str} sur l'agenda, veuillez patienter..."
+        ))
 
         last = Models::Messages.last
         args[:number].to_i.times do |i|
@@ -28,7 +31,9 @@ module Coronagenda
           Models::Messages.refresh(context, model)
         end
 
-        context.send_message(':white_check_mark: *Affichage terminé*')
+        waiter.edit('', Utils.embed(
+          description: ":white_check_mark: Affichage #{add_str} sur l'agenda effectué."
+        ))
       end
     end
   end

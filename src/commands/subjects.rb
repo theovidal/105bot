@@ -3,7 +3,7 @@ require_relative 'command'
 module Coronagenda
   module Commands
     class Subjects < Command
-      DESCRIPTION = "Obtenir la liste des matières"
+      DESC = "Obtenir la liste des matières"
       USAGE = "subjects"
 
       def self.exec(context, _)
@@ -11,10 +11,12 @@ module Coronagenda
         $subjects.each do |id, subject|
           content << ":#{subject['emoji']}: #{subject['name']} : `#{id}`\n"
         end
-        context.send_embed('', Discordrb::Webhooks::Embed.new(
+        context.send_embed('', Utils.embed(
           title: 'Liste des matières',
           description: content,
-          colour: $config['bot']['color'].to_i
+          thumbnail: Discordrb::Webhooks::EmbedThumbnail.new(
+            url: 'https://cdn4.iconfinder.com/data/icons/school-subjects/256/Geography-128.png'
+          )
         ))
       end
     end

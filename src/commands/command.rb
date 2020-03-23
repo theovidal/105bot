@@ -1,7 +1,7 @@
 module Coronagenda
   module Commands
     class Command
-      DESCRIPTION = 'Socle des commandes'
+      DESC = 'Socle des commandes'
       USAGE = 'commande'
 
       def self.parse_args(_)
