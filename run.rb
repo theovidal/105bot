@@ -11,7 +11,13 @@ DB = Sequel.sqlite($config['db']['path'])
 
 require_relative 'core'
 
-client = Discordrb::Bot.new(token: $config['bot']['token'])
+client = Discordrb::Bot.new(
+  token: $config['bot']['token'],
+  log_mode: $config['bot']['debug'] ? :debug : :quiet,
+  fancy_log: true,
+  name: $config['meta']['name'],
+  client_id: $config['meta']['client_id']
+)
 
 client.message(start_with: $config['bot']['prefix']) do |event|
   args = event.content.gsub("\n", '\\n').split(" ")

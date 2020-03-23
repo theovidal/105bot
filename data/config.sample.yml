@@ -1,6 +1,14 @@
 bot:
   token: Bot's token
   prefix: 'a:'
+  debug: false
+meta:
+  name: Coronagenda
+  client_id: 690904891929133190
+  version: 1.0.0
+  color: 7976509
+  illustration: https://cdn.discordapp.com/attachments/691715980354650143/691718390259384330/coconagenda.png
+  link: https://github.com/exybore/coronagenda
 db:
   path: ./testing.sqlite
 server:
