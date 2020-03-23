@@ -36,7 +36,8 @@ module Coronagenda
       end
 
       if context.author.role? $config['server']['role']
-        command.function.call(context, args)
+        args = command.object.parse_args(args)
+        command.object.exec(context, args)
       else
         context.send_message(':x: *Vous n\'avez pas la permission d\'exécuter cette commande.*')
       end
@@ -52,14 +53,15 @@ module Coronagenda
           cmd_name = resp[1]
           cmd = load_command(cmd_name)
           data = {
-            name:     cmd_name,
-            function: -> (context, args) { cmd.exec(context, args) },
-            desc:     (cmd::DESCRIPTION),
-            usage:    (cmd.const_defined?('USAGE') ? "#{prefix}#{cmd::USAGE}" : "#{prefix}#{cmd_name}")
+            name:   cmd_name,
+            object: cmd,
+            desc:   (cmd::DESCRIPTION),
+            usage:  (cmd.const_defined?('USAGE') ? "#{prefix}#{cmd::USAGE}" : "#{prefix}#{cmd_name}")
           }
           commands[cmd_name] = Classes::Command.new(data)
         end
       end
+      p commands
       commands
     end
 

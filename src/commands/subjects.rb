@@ -6,7 +6,7 @@ module Coronagenda
       DESCRIPTION = "Obtenir la liste des matières"
       USAGE = "subjects"
 
-      def self.exec(context, args)
+      def self.exec(context, _)
         content = ''
         $subjects.each do |id, subject|
           content << ":#{subject['emoji']}: #{subject['name']} : `#{id}`\n"

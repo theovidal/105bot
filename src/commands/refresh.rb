@@ -6,7 +6,7 @@ module Coronagenda
       DESCRIPTION = "Rafraichir tout l'agenda visible"
       USAGE = 'refresh'
 
-      def self.exec(context, args)
+      def self.exec(context, _)
         context.send(":arrows_counterclockwise: *Rafraichissement en cours, veuillez patienter...*
           `L'exécution de cette commande peut être plus ou moins longue, selon le nombre de jours actuellement affichés.`")
         Models::Messages.all.each do |message|

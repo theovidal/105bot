@@ -6,11 +6,17 @@ module Coronagenda
       DESCRIPTION = "Montrer l'agenda pour les x jours suivants le dernier message"
       USAGE = 'show <x>'
 
+      def self.parse_args(args)
+        {
+          number: args[0].to_i
+        }
+      end
+
       def self.exec(context, args)
         context.send_message(':inbox_tray: *Affichage en cours, veuillez patienter...*')
 
         last = Models::Messages.last
-        args[0].to_i.times do |i|
+        args[:number].to_i.times do |i|
           date = last[:date] + (60 * 60 * 24 * (i + 1))
           discord = context.bot.send_message($config['server']['output_channel'], date)
 
