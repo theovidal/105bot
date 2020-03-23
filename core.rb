@@ -1,5 +1,6 @@
 require_relative 'lib/classes'
 require_relative 'lib/data'
+require_relative 'lib/utils'
 require_relative 'lib/models/assignments'
 require_relative 'lib/models/messages'
 
@@ -9,7 +10,7 @@ module Coronagenda
     attr_reader :commands
 
     # Bot version
-    VERSION = $config['bot']['version']
+    VERSION = $config['meta']['version']
 
     # Library used for the bot
     LIBRARY = 'DiscordRB'
@@ -52,16 +53,14 @@ module Coronagenda
         if resp != nil && resp[1] != 'command'
           cmd_name = resp[1]
           cmd = load_command(cmd_name)
-          data = {
-            name:   cmd_name,
-            object: cmd,
-            desc:   (cmd::DESCRIPTION),
-            usage:  (cmd.const_defined?('USAGE') ? "#{prefix}#{cmd::USAGE}" : "#{prefix}#{cmd_name}")
-          }
-          commands[cmd_name] = Classes::Command.new(data)
+          commands[cmd_name] = Classes::Command.new(
+            cmd_name,
+            cmd,
+            (cmd.const_defined?('USAGE') ? "#{prefix}#{cmd::USAGE}" : "#{prefix}#{cmd_name}"),
+            (cmd::DESC)
+          )
         end
       end
-      p commands
       commands
     end
 

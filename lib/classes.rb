@@ -5,8 +5,8 @@ module Coronagenda
       # @return [String] command's name
       attr_reader :name
 
-      # @return [Proc] command's function to trigger when it's called
-      attr_reader :function
+      # @return [Coronagenda::Commands::Command] object associated with the command
+      attr_reader :object
 
       # @return [String, nil] command's usage, for the help
       attr_reader :usage
@@ -17,15 +17,15 @@ module Coronagenda
       # Initialize the Command object
       #
       # @param data [Hash] command data
-      def initialize(data)
-        @name        = data[:name]
-        @function    = data[:function]
-        @usage       = data[:usage]
-        @description = data[:description]
+      def initialize(name, object, usage, description)
+        @name        = name
+        @object      = object
+        @usage       = usage
+        @description = description
       end
 
       def to_s
-        "• `#{$config['bot']['prefix']}#@name` : #@description\nUtilisation : `#@usage`"
+        "**• `#{$config['bot']['prefix']}#@name` : #@description**\nUtilisation : `#@usage`"
       end
     end
   end
