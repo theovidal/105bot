@@ -1,4 +1,8 @@
+require 'tzinfo'
+
 module Coronagenda
+  TZ_OFFSET = TZInfo::Timezone.get('Europe/Paris').current_period.utc_total_offset
+
   EMOJI_DAYS = {
     1 => ':one:',
     2 => ':two:',
