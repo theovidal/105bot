@@ -9,13 +9,9 @@ module Coronagenda
       end
 
       def self.refresh(context, message)
-        content = ''
-        content << Models::Messages.prettify(message)
+        content = Models::Messages.prettify(message)
 
-        assignments = Models::Assignments.all.select do |a|
-          a[:date] > message[:date] && a.date <= message[:date] + 86400
-        end
-
+        assignments = Models::Assignments.from_day(message[:date])
         homework = ''
         events = ''
 
@@ -34,6 +30,13 @@ module Coronagenda
         content << "__:clipboard: Devoirs :__\n#{homework}"
 
         context.bot.channel($config['server']['output_channel']).message(message[:discord_id]).edit(content)
+      end
+
+      def self.from_day(day)
+        if day.is_a? Array
+          day = Time.new(2020, day[1], day[0], 0)
+        end
+        Models::Messages.where(date: day.to_i + TZ_OFFSET).first
       end
     end
   end
