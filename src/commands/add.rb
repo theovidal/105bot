@@ -8,9 +8,9 @@ module Coronagenda
 
       def self.parse_args(args)
         {
-          day: args[0],
-          month: args[1],
-          hour: args[2],
+          day: args[0].to_i,
+          month: args[1].to_i,
+          hour: args[2].to_i,
           subject: args[3],
           type: args[4],
           link: args[5],
@@ -24,17 +24,18 @@ module Coronagenda
           description: ":incoming_envelope: Ajout #{pretty_type} à l'agenda, veuillez patienter..."
         ))
 
-        date = Time.new(2020, args[:month], args[:day], args[:hour])
+        date = Date.new(2020, args[:month], args[:day])
         Models::Assignments.create do |assignment|
           assignment.date = date
-          assignment.to_give = args[:hour].to_i == 0
+          assignment.hour = args[:hour] if args[:hour] != 0
           assignment.subject = args[:subject]
           assignment.type = args[:type]
           assignment.link = args[:link] if args[:link] != '0'
           assignment.text = args[:text]
         end
 
-        Models::Messages.refresh(context, Models::Messages.from_day([args[:day], args[:month]]))
+        message = Models::Messages.from_day(date)
+        Models::Messages.refresh(context, message) if message != nil
         waiter.edit('', Utils.embed(
           description: ":white_check_mark: Ajout #{pretty_type} à l'agenda effectué.\n*Vous ne le voyez pas ? Essayez d'afficher davantage de jours via la commande `a:show` !*"
         ))

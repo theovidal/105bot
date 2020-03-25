@@ -1,6 +1,7 @@
 require 'discordrb'
 require 'sequel'
 require 'psych'
+require 'date'
 
 require_relative 'lib/storage'
 

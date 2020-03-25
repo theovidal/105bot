@@ -8,8 +8,8 @@ module Coronagenda
 
       def self.parse_args(args)
         {
-          day: args[0],
-          month: args[1],
+          day: args[0].to_i,
+          month: args[1].to_i,
           type: args[2],
           index: args[3].to_i - 1
         }
@@ -21,10 +21,14 @@ module Coronagenda
           description: ":wastebasket: Suppression #{pretty_type} de l'agenda, veuillez patienter..."
         ))
 
+        date = Date.new(2020, args[:month], args[:day])
+
         assignments =
-          Models::Assignments.from_day([args[:day], args[:month]]).select{|a| a.type == args[:type]}
+          Models::Assignments.from_day(date).select{|a| a.type == args[:type]}
         assignments[args[:index]].delete
-        Models::Messages.refresh(context, Models::Messages.from_day([args[:day], args[:month]]))
+
+        message = Models::Messages.from_day(date)
+        Models::Messages.refresh(context, message) if message != nil
 
         waiter.edit('', Utils.embed(
           description: ":white_check_mark: Suppression #{pretty_type} de l'agenda effectué."

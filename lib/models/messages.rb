@@ -2,7 +2,7 @@ module Coronagenda
   module Models
     class Messages < Sequel::Model
       def self.prettify(message)
-        date = Time.at(message[:date])
+        date = message[:date]
         days = date.day.digits
         output = "**――――――――――――――――――――**\n"
         output << "**:calendar_spiral: #{DAYS[date.wday]} #{EMOJI_DAYS[days[1]]}#{EMOJI_DAYS[days[0]]} #{MONTHS[date.month]}**\n\n"
@@ -34,9 +34,9 @@ module Coronagenda
 
       def self.from_day(day)
         if day.is_a? Array
-          day = Time.new(2020, day[1], day[0], 0)
+          day = Date.new(2020, day[1], day[0])
         end
-        Models::Messages.where(date: day.to_i + TZ_OFFSET).first
+        Messages.all.select { |m| m[:date] == day }.first
       end
     end
   end
