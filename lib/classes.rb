@@ -28,5 +28,24 @@ module Coronagenda
         "**• `#{$config['bot']['prefix']}#@name` : #@description**\nUtilisation : `#@usage`"
       end
     end
+
+    class Waiter
+      attr_reader :text
+
+      def initialize(context, text)
+        @context = context
+        @text = text
+        @msg = context.send_embed('', Utils.embed(
+          description: text
+        ))
+      end
+
+      def edit(text)
+        @text = text
+        @msg.edit('', Utils.embed(
+          description: text
+        ))
+      end
+    end
   end
 end
