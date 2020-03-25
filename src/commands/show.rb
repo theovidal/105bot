@@ -4,11 +4,13 @@ module Coronagenda
   module Commands
     class Show < Command
       DESC = "Montrer l'agenda pour les x jours suivants le dernier message"
-      USAGE = 'show <x>'
+      USAGE = 'show <x> <weekend?>'
 
       def self.parse_args(args)
+        args[1] = 0 if args[1].nil?
         {
-          number: args[0].to_i
+          number: args[0].to_i,
+          includeWeek: !args[1].to_i.zero?
         }
       end
 
@@ -20,7 +22,11 @@ module Coronagenda
 
         last = Models::Messages.last
         args[:number].to_i.times do |i|
-          date = last[:date] + (60 * 60 * 24 * (i + 1))
+          date = last[:date] + i + 1
+          if date.wday == 0 || date.wday == 6
+            i += 1
+            redo
+          end
           discord = context.bot.send_message($config['server']['output_channel'], date)
 
           model = Models::Messages.create do |message|
