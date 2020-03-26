@@ -1,4 +1,5 @@
 emoji_days:
+  - ':zero:'
   - ':one:'
   - ':two:'
   - ':three:'
@@ -8,7 +9,6 @@ emoji_days:
   - ':seven:'
   - ':eight:'
   - ':nine:'
-  - ':zero:'
 months:
   - janvier
   - février

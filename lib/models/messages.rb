@@ -4,6 +4,7 @@ module Coronagenda
       def self.prettify(message)
         date = message[:date]
         days = date.day.digits
+        days[1] = 0 if days[1].nil?
         output = "**――――――――――――――――――――**\n"
         output << "**:calendar_spiral: #{DAYS[date.wday]} #{EMOJI_DAYS[days[1]]}#{EMOJI_DAYS[days[0]]} #{MONTHS[date.month - 1]}**\n\n"
       end
