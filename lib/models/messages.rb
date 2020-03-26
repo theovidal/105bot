@@ -5,7 +5,7 @@ module Coronagenda
         date = message[:date]
         days = date.day.digits
         output = "**――――――――――――――――――――**\n"
-        output << "**:calendar_spiral: #{DAYS[date.wday]} #{EMOJI_DAYS[days[1]]}#{EMOJI_DAYS[days[0]]} #{MONTHS[date.month]}**\n\n"
+        output << "**:calendar_spiral: #{DAYS[date.wday]} #{EMOJI_DAYS[days[1]]}#{EMOJI_DAYS[days[0]]} #{MONTHS[date.month - 1]}**\n\n"
       end
 
       def self.refresh(context, message)

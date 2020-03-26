@@ -3,3 +3,4 @@
 *.sqlite
 data/config.yml
 data/subjects.yml
+data/strings.yml
