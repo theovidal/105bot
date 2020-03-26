@@ -20,7 +20,7 @@ module Coronagenda
 
         messages = Models::Messages.reverse(:id).limit(args[:number])
         messages.each do |message|
-          context.bot.channel($config['server']['output_channel']).message(message[:discord_id]).delete
+          context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).delete
           message.delete
         end
 

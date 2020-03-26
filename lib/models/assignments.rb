@@ -2,7 +2,7 @@ module Coronagenda
   module Models
     class Assignments < Sequel::Model
       def self.prettify(assignment)
-        subject = $subjects[assignment[:subject]]
+        subject = SUBJECTS[assignment[:subject]]
         emoji = ":#{subject['emoji']}:"
         if assignment.type == 'homework'
           due = assignment[:hour] != nil ? "(rendu avant #{assignment[:hour]}h)" : ''
@@ -28,7 +28,7 @@ module Coronagenda
         Assignments.all.select do |assignment|
           date = assignment[:date]
           time = Time.new(date.year, date.month, date.day, assignment[:hour])
-          assignment.type == 'event' && time >= now && time <= now + $config['bot']['refresh_interval']
+          assignment.type == 'event' && time >= now && time <= now + CONFIG['bot']['refresh_interval']
         end
       end
     end

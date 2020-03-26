@@ -19,13 +19,13 @@ module Coronagenda
                     image: nil,
                     timestamp: Time.now,
                     footer: Discordrb::Webhooks::EmbedFooter.new(
-                      text: "#{$config['meta']['name']} v#{$config['meta']['version']}",
-                      icon_url: $config['meta']['illustration']
+                      text: "#{CONFIG['meta']['name']} v#{CONFIG['meta']['version']}",
+                      icon_url: CONFIG['meta']['illustration']
                     ),
                     fields: [])
       Discordrb::Webhooks::Embed.new(
         title: title,
-        color: $config['meta']['color'].to_i,
+        color: CONFIG['meta']['color'].to_i,
         description: description,
         url: url,
         fields: fields,
@@ -42,10 +42,10 @@ module Coronagenda
       events = Models::Assignments.upcoming_events
       unless events == []
         events.each do |event|
-          subject = $subjects[event[:subject]]
+          subject = SUBJECTS[event[:subject]]
           content << "<@&#{subject['role']}> :#{subject['emoji']}: #{subject['name']} - Événement : #{event.text}\n"
         end
-        client.channel($config['server']['broadcast_channel']).send_message(content)
+        client.channel(CONFIG['server']['broadcast_channel']).send_message(content)
       end
     end
   end

@@ -1,6 +1,4 @@
 require_relative 'lib/classes'
-require_relative 'lib/data'
-require_relative 'lib/utils'
 require_relative 'lib/models/assignments'
 require_relative 'lib/models/messages'
 
@@ -10,10 +8,7 @@ module Coronagenda
     attr_reader :commands
 
     # Bot version
-    VERSION = $config['meta']['version']
-
-    # Library used for the bot
-    LIBRARY = 'DiscordRB'
+    VERSION = CONFIG['meta']['version']
 
     def initialize(client)
       @client = client
@@ -26,17 +21,17 @@ module Coronagenda
     # @param args [Array<String>] list of arguments passed to the command
     # @param context [Discordrb::Event::MessageEvent] the command context
     def handle_command(command_name, args, context)
-      return unless context.channel.id == $config['server']['commands_channel']
+      return unless context.channel.id == CONFIG['server']['commands_channel']
 
       command = @commands[command_name]
       if command.nil?
         context.send_message(
-          "❓ *Commande inconnue. Faites #{$config['bot']['prefix']}help pour avoir la liste complète des commandes autorisées.*"
+          "❓ *Commande inconnue. Faites #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées.*"
         )
         return
       end
 
-      if context.author.role? $config['server']['role']
+      if context.author.role? CONFIG['server']['role']
         args = command.object.parse_args(args)
         command.object.exec(context, args)
       else
@@ -47,7 +42,7 @@ module Coronagenda
     # List all the commands
     def list_commands
       commands = {}
-      prefix = $config['bot']['prefix']
+      prefix = CONFIG['bot']['prefix']
       Dir["src/commands/*.rb"].each do |path|
         resp = Regexp.new("([a-z0-9]+)\.rb$").match(path)
         if resp != nil && resp[1] != 'command'

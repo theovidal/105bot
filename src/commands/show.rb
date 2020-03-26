@@ -27,7 +27,7 @@ module Coronagenda
             i += 1
             redo
           end
-          discord = context.bot.send_message($config['server']['output_channel'], date)
+          discord = context.bot.send_message(CONFIG['server']['output_channel'], date)
 
           model = Models::Messages.create do |message|
             message.date = date

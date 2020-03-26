@@ -1,4 +1,10 @@
+require_relative 'storage'
+
 module Coronagenda
+  CONFIG = load_yml('config')
+
+  SUBJECTS = load_yml('subjects')
+
   EMOJI_DAYS = {
     1 => ':one:',
     2 => ':two:',

@@ -8,7 +8,7 @@ module Coronagenda
 
       def self.exec(context, _)
         content = ''
-        $subjects.each do |id, subject|
+        SUBJECTS.each do |id, subject|
           content << ":#{subject['emoji']}: #{subject['name']} : `#{id}`\n"
         end
         context.send_embed('', Utils.embed(

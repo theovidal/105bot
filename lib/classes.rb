@@ -25,7 +25,7 @@ module Coronagenda
       end
 
       def to_s
-        "**• `#{$config['bot']['prefix']}#@name` : #@description**\nUtilisation : `#@usage`"
+        "**• `#{CONFIG['bot']['prefix']}#@name` : #@description**\nUtilisation : `#@usage`"
       end
     end
 

@@ -29,7 +29,7 @@ module Coronagenda
         content << "__:incoming_envelope: Événements :__\n#{events}\n"
         content << "__:clipboard: Devoirs :__\n#{homework}"
 
-        context.bot.channel($config['server']['output_channel']).message(message[:discord_id]).edit(content)
+        context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).edit(content)
       end
 
       def self.from_day(day)
