@@ -22,6 +22,15 @@ module Coronagenda
         end
         Assignments.all.select { |a| a[:date] == day }
       end
+
+      def self.upcoming_events
+        now = Time.now
+        Assignments.all.select do |assignment|
+          date = assignment[:date]
+          time = Time.new(date.year, date.month, date.day, assignment[:hour])
+          assignment.type == 'event' && time >= now && time <= now + $config['bot']['refresh_interval']
+        end
+      end
     end
   end
 end

@@ -2,6 +2,7 @@ bot:
   token: Bot's token
   prefix: 'a:'
   debug: false
+  refresh_interval: 600
 meta:
   name: Coronagenda
   client_id: 690904891929133190

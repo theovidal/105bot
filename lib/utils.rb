@@ -36,5 +36,17 @@ module Coronagenda
         footer: footer
       )
     end
+
+    def Utils.event_notification(client)
+      content = ''
+      events = Models::Assignments.upcoming_events
+      unless events == []
+        events.each do |event|
+          subject = $subjects[event[:subject]]
+          content << "<@&#{subject['role']}> :#{subject['emoji']}: #{subject['name']} - Événement : #{event.text}\n"
+        end
+        client.channel($config['server']['broadcast_channel']).send_message(content)
+      end
+    end
   end
 end
