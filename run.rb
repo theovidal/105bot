@@ -21,7 +21,7 @@ client = Discordrb::Bot.new(
 $bot = Coronagenda::Bot.new(client)
 
 client.message(start_with: Coronagenda::CONFIG['bot']['prefix']) do |event|
-  args = event.content.gsub("\n", '\\n').split(" ")
+  args = event.content.sub(' ', ',').gsub("\n", '\\n').split(',')
   command_name = args[0].delete_prefix(Coronagenda::CONFIG['bot']['prefix'])
   $bot.handle_command(command_name, args[1..], event)
 end

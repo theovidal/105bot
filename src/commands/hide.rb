@@ -5,12 +5,12 @@ module Coronagenda
     class Hide < Command
       DESC = 'Masquer les x derniers jours affichés'
       USAGE = 'hide <x>'
-
-      def self.parse_args(args)
-        {
-          number: args[0].to_i
+      ARGS = {
+        number: {
+          type: Integer,
+          default: nil
         }
-      end
+      }
 
       def self.exec(context, args)
         last_str = args[:number] == 1 ? 'du dernier jour' : "des #{args[:number]} derniers jours"

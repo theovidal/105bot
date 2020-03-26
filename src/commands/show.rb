@@ -5,16 +5,19 @@ module Coronagenda
     class Show < Command
       DESC = "Montrer l'agenda pour les x jours suivants le dernier message"
       USAGE = 'show <x> <weekend?>'
-
-      def self.parse_args(args)
-        args[1] = 0 if args[1].nil?
-        {
-          number: args[0].to_i,
-          includeWeek: !args[1].to_i.zero?
+      ARGS = {
+        number: {
+          type: Integer,
+          default: nil
+        },
+        includeWeek: {
+          type: Integer,
+          default: 0
         }
-      end
+      }
 
       def self.exec(context, args)
+        args[:includeWeek] = !args[:includeWeek].zero?
         add_str = args[:number] == 1 ? "d'un jour supplémentaire" : "de #{args[:number]} jours supplémentaires"
         waiter = context.send_embed('', Utils.embed(
           description: ":inbox_tray: Affichage #{add_str} sur l'agenda, veuillez patienter..."

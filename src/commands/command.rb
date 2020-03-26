@@ -3,10 +3,7 @@ module Coronagenda
     class Command
       DESC = 'Socle des commandes'
       USAGE = 'commande'
-
-      def self.parse_args(_)
-        {}
-      end
+      ARGS = {}
 
       def self.exec(_, _)
         # --

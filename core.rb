@@ -13,6 +13,7 @@ module Coronagenda
     def initialize(client)
       @client = client
       @commands = list_commands
+      p @commands
     end
 
     # Trigger a command
@@ -31,12 +32,43 @@ module Coronagenda
         return
       end
 
-      if context.author.role? CONFIG['server']['role']
-        args = command.object.parse_args(args)
-        command.object.exec(context, args)
-      else
+      unless context.author.role? CONFIG['server']['role']
         context.send_message(':x: *Vous n\'avez pas la permission d\'exécuter cette commande.*')
+        return
       end
+      
+      parsed_args = {}
+
+      i = 0
+      command.args.each do |key, arg|
+        gived = args[i]
+        gived.strip! unless gived.nil?
+        if gived == '' || gived.nil?
+          if arg[:default].nil?
+            context.send_message("Erreur d'argument : #{key} requis")
+            return
+          end
+          parsed_args[key] = arg[:default] 
+        else
+          error = false
+          unless arg[:type] == String
+            begin
+              gived = eval("#{arg[:type]}('#{gived}')")
+            rescue ArgumentError
+              error = true
+            end
+          end
+
+          if error
+            context.send_message("Erreur d'argument : #{key} doit être de type #{arg[:type]}")
+            return
+          end
+          gived = args[i..].join(',') unless arg[:extend].nil?
+          parsed_args[key] = gived
+        end
+        i += 1
+      end
+      command.object.exec(context, parsed_args)
     end
 
     # List all the commands
@@ -52,7 +84,8 @@ module Coronagenda
             cmd_name,
             cmd,
             (cmd.const_defined?('USAGE') ? "#{prefix}#{cmd::USAGE}" : "#{prefix}#{cmd_name}"),
-            (cmd::DESC)
+            (cmd::DESC),
+            (cmd::ARGS)
           )
         end
       end

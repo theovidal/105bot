@@ -5,17 +5,28 @@ module Coronagenda
     class Remove < Command
       DESC = "Retirer un devoir ou un événement"
       USAGE = "remove <jour> <mois> <type> <numéro>"
-
-      def self.parse_args(args)
-        {
-          day: args[0].to_i,
-          month: args[1].to_i,
-          type: args[2],
-          index: args[3].to_i - 1
+      ARGS = {
+        day: {
+          type: Integer,
+          default: Date.today.day
+        },
+        month: {
+          type: Integer,
+          default: Date.today.month
+        },
+        type: {
+          type: String,
+          default: 'homework'
+        },
+        index: {
+          type: Integer,
+          default: 1
         }
-      end
+      }
 
       def self.exec(context, args)
+        args[:index] -= 1
+
         pretty_type = args[:type] == 'homework' ? 'du devoir' : "de l'événement"
         waiter = context.send_embed('', Utils.embed(
           description: ":wastebasket: Suppression #{pretty_type} de l'agenda, veuillez patienter..."

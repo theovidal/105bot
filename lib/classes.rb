@@ -14,14 +14,18 @@ module Coronagenda
       # @return [String, nil] command's description
       attr_reader :description
 
+      # @return [Hash] command's arguments
+      attr_reader :args
+
       # Initialize the Command object
       #
       # @param data [Hash] command data
-      def initialize(name, object, usage, description)
+      def initialize(name, object, usage, description, args)
         @name        = name
         @object      = object
         @usage       = usage
         @description = description
+        @args = args
       end
 
       def to_s

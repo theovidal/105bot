@@ -5,18 +5,37 @@ module Coronagenda
     class Add < Command
       DESC = "Ajouter un devoir ou un événement. S'il n'y a pas de lien ou d'heure de rendu, préciser `0` dans les champs correspondants."
       USAGE = 'add <jour> <mois> <heure> <matière> <type> <lien> <texte...>'
-
-      def self.parse_args(args)
-        {
-          day: args[0].to_i,
-          month: args[1].to_i,
-          hour: args[2].to_i,
-          subject: args[3],
-          type: args[4],
-          link: args[5],
-          text: args[6..].join(" ")
+      ARGS = {
+        day: {
+          type: Integer,
+          default: nil
+        },
+        month: {
+          type: Integer,
+          default: Date.today.month
+        },
+        hour: {
+          type: Integer,
+          default: 0
+        },
+        subject: {
+          type: String,
+          default: nil
+        },
+        type: {
+          type: String,
+          default: 'homework'
+        },
+        link: {
+          type: String,
+          default: '0'
+        },
+        text: {
+          type: String,
+          default: nil,
+          extend: true
         }
-      end
+      }
 
       def self.exec(context, args)
         pretty_type = args[:type] == 'homework' ? 'du devoir' : "de l'événement"
