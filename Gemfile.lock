@@ -32,6 +32,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     sequel (5.30.0)
+    timeloop (2.0.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
@@ -46,6 +47,10 @@ PLATFORMS
 DEPENDENCIES
   discordrb (~> 3.3)
   sequel (~> 5.30)
+  timeloop (~> 2.0)
+
+RUBY VERSION
+   ruby 2.6.0p0
 
 BUNDLED WITH
    2.1.4
