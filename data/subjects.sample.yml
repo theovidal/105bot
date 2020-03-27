@@ -1,9 +1,9 @@
 french:
   name: Français
-  emoji: books
+  emoji: ':scroll:'
 maths:
   name: Mathématiques
-  emoji: '1234'
+  emoji: ':1234:'
 geography:
   name: Géographie
-  emoji: earth_americas
+  emoji: ':map:'

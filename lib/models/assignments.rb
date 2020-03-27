@@ -5,13 +5,12 @@ module Coronagenda
 
       def self.prettify(assignment)
         subject = SUBJECTS[assignment[:subject]]
-        emoji = ":#{subject['emoji']}:"
         if assignment.type == 'homework'
           due = assignment[:hour] != nil ? "(rendu avant #{assignment[:hour]}h)" : ''
         else
           due = "(à #{assignment[:hour]}h)"
         end
-        output = "• #{emoji} #{subject['name']} : #{assignment[:text].gsub('\\n', "\n")} #{due}\n"
+        output = "• #{subject['emoji']} #{subject['name']} : #{assignment[:text].gsub('\\n', "\n")} #{due}\n"
         unless assignment[:link] == nil
           output << "#{assignment[:link]}\n"
         end
