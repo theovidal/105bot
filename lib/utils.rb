@@ -39,15 +39,22 @@ module Coronagenda
     end
 
     def Utils.event_notification(client)
-      content = ''
       events = Models::Assignments.upcoming_events
       unless events == []
         events.each do |event|
           subject = SUBJECTS[event[:subject]]
-          content << "<@&#{subject['role']}> :#{subject['emoji']}: #{subject['name']} - Événement : #{event.text}\n"
+          role = client.server(689125786460094548).role(subject['role'])
+          client.channel(CONFIG['server']['broadcast_channel']).send_embed(role.mention, Utils.embed(
+            title: ':bell: Un événement va commencer',
+            color: role.color.combined,
+            description: "#{subject['emoji']} #{subject['name']} : #{event.text}",
+            thumbnail: Discordrb::Webhooks::EmbedThumbnail.new(
+              url: subject['illustration']
+            )
+          ))
         end
-        client.channel(CONFIG['server']['broadcast_channel']).send_message(content)
       end
+      events.size
     end
   end
 end

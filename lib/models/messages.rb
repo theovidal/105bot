@@ -1,17 +1,7 @@
 module Coronagenda
   module Models
     class Messages < Sequel::Model
-      def self.prettify(message)
-        date = message[:date]
-        days = date.day.digits
-        days[1] = 0 if days[1].nil?
-        output = "**――――――――――――――――――――**\n"
-        output << "**:calendar_spiral: #{DAYS[date.wday]} #{EMOJI_DAYS[days[1]]}#{EMOJI_DAYS[days[0]]} #{MONTHS[date.month - 1]}**\n\n"
-      end
-
       def self.refresh(context, message)
-        content = Models::Messages.prettify(message)
-
         assignments = Models::Assignments.from_day(message[:date])
         homework = ''
         events = ''
@@ -24,13 +14,26 @@ module Coronagenda
           end
         end
 
-        events = "Aucun événement n'est prévu ce jour\n" if events == ''
-        homework = "Aucun devoir n'est à faire pour ce jour" if homework == ''
+        events = "*Aucun événement n'est prévu ce jour*" if events == ''
+        homework = "*Aucun devoir n'est à faire pour ce jour*" if homework == ''
 
-        content << "__:incoming_envelope: Événements :__\n#{events}\n"
-        content << "__:clipboard: Devoirs :__\n#{homework}"
+        date = message[:date]
+        day = date.day == 1 ? '1er' : date.day
 
-        context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).edit(content)
+        context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).edit('', Utils.embed(
+          title: ":calendar_spiral: #{DAYS[date.wday]} #{day} #{MONTHS[date.month - 1]} #{date.year}",
+          color: CONFIG['messages']['day_colors'][date.wday],
+          fields: [
+            Discordrb::Webhooks::EmbedField.new(
+              name: ':bell: Évenements',
+              value: events
+            ),
+            Discordrb::Webhooks::EmbedField.new(
+              name: ':clipboard: Devoirs',
+              value: homework
+            )
+          ]
+        ))
       end
 
       def self.from_day(day)
