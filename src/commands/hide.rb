@@ -4,9 +4,9 @@ module Coronagenda
   module Commands
     class Hide < Command
       DESC = 'Masquer les x derniers jours affichés'
-      USAGE = 'hide <x>'
       ARGS = {
         number: {
+          description: 'Nombre de jours à masquer',
           type: Integer,
           default: nil
         }

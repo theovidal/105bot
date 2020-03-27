@@ -4,33 +4,39 @@ module Coronagenda
   module Commands
     class Add < Command
       DESC = "Ajouter un devoir ou un événement. S'il n'y a pas de lien ou d'heure de rendu, préciser `0` dans les champs correspondants."
-      USAGE = 'add <jour> <mois> <heure> <matière> <type> <lien> <texte...>'
       ARGS = {
         day: {
+          description: 'Jour de la tâche',
           type: Integer,
           default: nil
         },
         month: {
+          description: 'Mois de la tâche',
           type: Integer,
           default: Date.today.month
         },
         hour: {
+          description: "Heure de l'événement / Heure de rendu du devoir s'il y en a une",
           type: Integer,
           default: 0
         },
         subject: {
+          description: 'Matière concernée par la tâche',
           type: String,
           default: nil
         },
         type: {
+          description: 'Type de la tâche : `homework` pour un devoir; `event` pour un événement',
           type: String,
           default: 'homework'
         },
         link: {
+          description: "Lien associé à la tâche (laisser vide s'il n'y en a pas)",
           type: String,
           default: '0'
         },
         text: {
+          description: 'Description de la tâche',
           type: String,
           default: nil,
           extend: true

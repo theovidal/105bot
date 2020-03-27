@@ -3,22 +3,25 @@ require_relative 'command'
 module Coronagenda
   module Commands
     class Remove < Command
-      DESC = "Retirer un devoir ou un événement"
-      USAGE = "remove <jour> <mois> <type> <numéro>"
+      DESC = 'Retirer un devoir ou un événement'
       ARGS = {
         day: {
+          description: 'Jour de la tâche',
           type: Integer,
           default: Date.today.day
         },
         month: {
+          description: 'Mois de la tâche',
           type: Integer,
           default: Date.today.month
         },
         type: {
+          description: 'Type de la tâche : `homework` pour un devoir; `event` pour un événement',
           type: String,
           default: 'homework'
         },
         index: {
+          description: 'Numéro de la tâche dans la liste',
           type: Integer,
           default: 1
         }

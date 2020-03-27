@@ -4,14 +4,16 @@ module Coronagenda
   module Commands
     class Show < Command
       DESC = "Montrer l'agenda pour les x jours suivants le dernier message"
-      USAGE = 'show <x> <weekend?>'
       ARGS = {
         number: {
+          description: 'Nombre de jours à afficher',
           type: Integer,
           default: nil
         },
         includeWeek: {
+          description: 'Inclure ou non les jours de week-end (Samedi et Dimanche)',
           type: Integer,
+          boolean: true,
           default: 0
         }
       }
