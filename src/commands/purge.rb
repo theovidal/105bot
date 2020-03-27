@@ -7,16 +7,18 @@ module Coronagenda
       USAGE = 'purge'
 
       def self.exec(context, _)
-        waiter = Classes::Waiter.new(context, ":pirate_flag: Retrait des jours passés, veuillez patienter...")
+        waiter = Classes::Waiter.new(context, ":pirate_flag: Retrait des devoirs et événements passés, veuillez patienter...")
 
         messages = Models::Messages.all.select { |m| m[:date] < Date.today }
         messages.each do |message|
           context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).delete
           message.delete
-          Models::Assignments.from_day(message[:date]).each { |a| a.delete }
         end
 
-        waiter.edit(":white_check_mark: Retrait des jours passés effectué.")
+        assignments = Models::Assignments.all.select { |a| a[:date] < Date.today }
+        assignments.each { |assignment| assignment.delete }
+
+        waiter.finish("Retrait des devoirs et événements passés effectué.")
       end
     end
   end
