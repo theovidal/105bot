@@ -28,22 +28,26 @@ module Coronagenda
         args[:index] -= 1
 
         pretty_type = args[:type] == 'homework' ? 'du devoir' : "de l'événement"
-        waiter = context.send_embed('', Utils.embed(
-          description: ":wastebasket: Suppression #{pretty_type} de l'agenda, veuillez patienter..."
-        ))
+        waiter = Classes::Waiter.new(context, ":wastebasket: Suppression #{pretty_type} de l'agenda, veuillez patienter...")
 
-        date = Date.new(2020, args[:month], args[:day])
+        raise Classes::ExecutionError.new(waiter, "le type `#{args[:type]}` est inconnu.") unless Models::Assignments::TYPES.include? args[:type]
 
-        assignments =
-          Models::Assignments.from_day(date).select{|a| a.type == args[:type]}
-        assignments[args[:index]].delete
+        begin
+          date = Date.new(2020, args[:month], args[:day])
+        rescue ArgumentError
+          raise Classes::ExecutionError.new(waiter, 'la date est incorrecte.')
+        end
 
+        assignments = Models::Assignments.from_day(date).select{|a| a.type == args[:type]}
+
+        assignment = assignments[args[:index]]
+        raise Classes::ExecutionError.new(waiter, "le numéro #{pretty_type} est incorrect.") if assignment.nil?
+
+        assignment.delete
         message = Models::Messages.from_day(date)
         Models::Messages.refresh(context, message) if message != nil
 
-        waiter.edit('', Utils.embed(
-          description: ":white_check_mark: Suppression #{pretty_type} de l'agenda effectué."
-        ))
+        waiter.finish("Suppression #{pretty_type} de l'agenda effectué.")
       end
     end
   end

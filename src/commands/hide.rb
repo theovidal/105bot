@@ -14,19 +14,20 @@ module Coronagenda
 
       def self.exec(context, args)
         last_str = args[:number] == 1 ? 'du dernier jour' : "des #{args[:number]} derniers jours"
-        waiter = context.send_embed('', Utils.embed(
-          description: ":outbox_tray: Retrait #{last_str} de l'agenda, veuillez patienter..."
-        ))
+        waiter = Classes::Waiter.new(context, ":outbox_tray: Retrait #{last_str} de l'agenda, veuillez patienter...")
 
-        messages = Models::Messages.reverse(:id).limit(args[:number])
+        begin
+          messages = Models::Messages.reverse(:id).limit(args[:number])
+        rescue Sequel::Error
+          raise Classes::ExecutionError.new(waiter, "le nombre #{args[:number]} est incorrect.")
+        end
+
         messages.each do |message|
           context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).delete
           message.delete
         end
 
-        waiter.edit('', Utils.embed(
-          description: ":white_check_mark: Retrait #{last_str} de l'agenda effectué."
-        ))
+        waiter.finish("Retrait #{last_str} de l'agenda effectué.")
       end
     end
   end

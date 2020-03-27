@@ -14,6 +14,7 @@ module Coronagenda
     def Utils.embed(title: nil,
                     description: nil,
                     url: nil,
+                    color: CONFIG['messages']['color'].to_i,
                     author: nil,
                     thumbnail: nil,
                     image: nil,
@@ -25,7 +26,7 @@ module Coronagenda
                     fields: [])
       Discordrb::Webhooks::Embed.new(
         title: title,
-        color: CONFIG['meta']['color'].to_i,
+        color: color,
         description: description,
         url: url,
         fields: fields,

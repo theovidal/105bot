@@ -39,11 +39,17 @@ module Coronagenda
 
       def self.exec(context, args)
         pretty_type = args[:type] == 'homework' ? 'du devoir' : "de l'événement"
-        waiter = context.send_embed('', Utils.embed(
-          description: ":incoming_envelope: Ajout #{pretty_type} à l'agenda, veuillez patienter..."
-        ))
+        waiter = Classes::Waiter.new(context, ":incoming_envelope: Ajout #{pretty_type} à l'agenda, veuillez patienter...")
 
-        date = Date.new(2020, args[:month], args[:day])
+        raise Classes::ExecutionError.new(waiter, "le type `#{args[:type]}` est inconnu.") unless Models::Assignments::TYPES.include? args[:type]
+        raise Classes::ExecutionError.new(waiter, "la matière `#{args[:subject]}` est inconnue.") unless SUBJECTS.include? args[:subject]
+
+        begin
+          date = Date.new(2020, args[:month], args[:day])
+        rescue ArgumentError
+          raise Classes::ExecutionError.new(waiter, 'la date est incorrecte.')
+        end
+
         Models::Assignments.create do |assignment|
           assignment.date = date
           assignment.hour = args[:hour] if args[:hour] != 0
@@ -55,9 +61,7 @@ module Coronagenda
 
         message = Models::Messages.from_day(date)
         Models::Messages.refresh(context, message) if message != nil
-        waiter.edit('', Utils.embed(
-          description: ":white_check_mark: Ajout #{pretty_type} à l'agenda effectué.\n*Vous ne le voyez pas ? Essayez d'afficher davantage de jours via la commande `a:show` !*"
-        ))
+        waiter.finish("Ajout #{pretty_type} à l'agenda effectué.", "Vous ne le voyez pas ? Essayez d'afficher davantage de jours via la commande `#{CONFIG['bot']['prefix']}show` !")
       end
     end
   end

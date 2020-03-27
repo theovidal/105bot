@@ -1,6 +1,8 @@
 module Coronagenda
   module Models
     class Assignments < Sequel::Model
+      TYPES = %w(homework event)
+
       def self.prettify(assignment)
         subject = SUBJECTS[assignment[:subject]]
         emoji = ":#{subject['emoji']}:"

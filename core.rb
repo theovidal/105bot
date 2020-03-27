@@ -13,7 +13,6 @@ module Coronagenda
     def initialize(client)
       @client = client
       @commands = list_commands
-      p @commands
     end
 
     # Trigger a command
@@ -24,51 +23,47 @@ module Coronagenda
     def handle_command(command_name, args, context)
       return unless context.channel.id == CONFIG['server']['commands_channel']
 
-      command = @commands[command_name]
-      if command.nil?
-        context.send_message(
-          "❓ *Commande inconnue. Faites #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées.*"
-        )
-        return
-      end
+      begin
+        command = @commands[command_name]
+        raise Classes::CommandParsingError.new("**:x: Vous n'avez pas la permission d'intéragir avec le robot.**\n\nContactez un administateur pour obtenir plus de détails.") unless context.author.role? CONFIG['server']['role']
+        raise Classes::CommandParsingError.new("**:question: La commande #{CONFIG['bot']['prefix']}#{command_name} est inconnue.**\n\nExécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées.") if command.nil?
 
-      unless context.author.role? CONFIG['server']['role']
-        context.send_message(':x: *Vous n\'avez pas la permission d\'exécuter cette commande.*')
-        return
-      end
-      
-      parsed_args = {}
-
-      i = 0
-      command.args.each do |key, arg|
-        gived = args[i]
-        gived.strip! unless gived.nil?
-        if gived == '' || gived.nil?
-          if arg[:default].nil?
-            context.send_message("Erreur d'argument : #{key} requis")
-            return
-          end
-          parsed_args[key] = arg[:default] 
-        else
-          error = false
-          unless arg[:type] == String
-            begin
-              gived = eval("#{arg[:type]}('#{gived}')")
-            rescue ArgumentError
-              error = true
+        parsed_args = {}
+        i = 0
+        command.args.each do |key, arg|
+          gived = args[i]
+          gived.strip! unless gived.nil?
+          if gived == '' || gived.nil?
+            raise Classes::ArgumentError.new("`#{key}` est un argument obligatoire.") if arg[:default].nil?
+            parsed_args[key] = arg[:default]
+          else
+            unless arg[:type] == String
+              begin
+                gived = eval("#{arg[:type]}('#{gived}')")
+              rescue ArgumentError
+                raise Classes::ArgumentError.new("`#{key}` doit être de type `#{arg[:type]}`")
+              end
             end
-          end
 
-          if error
-            context.send_message("Erreur d'argument : #{key} doit être de type #{arg[:type]}")
-            return
+            gived = args[i..].join(',') unless arg[:extend].nil?
+            parsed_args[key] = gived
           end
-          gived = args[i..].join(',') unless arg[:extend].nil?
-          parsed_args[key] = gived
+          i += 1
         end
-        i += 1
+        command.object.exec(context, parsed_args)
+      rescue Classes::CommandParsingError => e
+        context.send_embed('', Utils.embed(
+          description: e.message,
+          color: 12000284
+        ))
+      rescue Classes::ArgumentError => e
+        context.send_embed('', Utils.embed(
+          description: "**#{CONFIG['messages']['error_emoji']} Erreur dans les arguments : #{e.message}**\n\nPour en savoir plus sur les commandes et leurs arguments, exécutez `#{CONFIG['bot']['prefix']}help`.",
+          color: 12000284
+        ))
+      rescue Classes::ExecutionError => e
+        e.waiter.error("Erreur dans l'exécution de la commande : #{e.message}")
       end
-      command.object.exec(context, parsed_args)
     end
 
     # List all the commands
