@@ -69,7 +69,6 @@ module Coronagenda
     # List all the commands
     def list_commands
       commands = {}
-      prefix = CONFIG['bot']['prefix']
       Dir["src/commands/*.rb"].each do |path|
         resp = Regexp.new("([a-z0-9]+)\.rb$").match(path)
         if resp != nil && resp[1] != 'command'
@@ -78,7 +77,6 @@ module Coronagenda
           commands[cmd_name] = Classes::Command.new(
             cmd_name,
             cmd,
-            (cmd.const_defined?('USAGE') ? "#{prefix}#{cmd::USAGE}" : "#{prefix}#{cmd_name}"),
             (cmd::DESC),
             (cmd::ARGS)
           )
