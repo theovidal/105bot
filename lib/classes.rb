@@ -1,5 +1,20 @@
 module Coronagenda
   module Classes
+    class ExecutionError < ::StandardError
+      attr_reader :waiter
+
+      def initialize(waiter, message)
+        super(message)
+        @waiter = waiter
+      end
+    end
+
+    class ArgumentError < ::StandardError
+    end
+
+    class CommandParsingError < ::StandardError
+    end
+
     # Command class
     class Command
       # @return [String] command's name
@@ -36,19 +51,40 @@ module Coronagenda
     class Waiter
       attr_reader :text
 
-      def initialize(context, text)
+      def initialize(context, text, subtext = '')
         @context = context
         @text = text
-        @msg = context.send_embed('', Utils.embed(
-          description: text
-        ))
+        @subtext = subtext
+        @color = CONFIG['messages']['wait_color']
+        @msg = context.send_embed('', generate_msg)
       end
 
-      def edit(text)
-        @text = text
-        @msg.edit('', Utils.embed(
-          description: text
-        ))
+      def edit_subtext(text)
+        @subtext = text
+        @msg.edit('', generate_msg)
+      end
+
+      def finish(text, subtext = '')
+        @text = "#{CONFIG['messages']['finished_emoji']} #{text}"
+        @subtext = subtext
+        @color = CONFIG['messages']['color']
+        @msg.edit('', generate_msg)
+      end
+
+      def error(text, subtext = '')
+        @text = "#{CONFIG['messages']['error_emoji']} #{text}"
+        @subtext = subtext
+        @color = CONFIG['messages']['error_color']
+        @msg.edit('', generate_msg)
+      end
+
+      private
+
+      def generate_msg
+        Utils.embed(
+          description: "**#@text**\n\n#@subtext",
+          color: @color
+        )
       end
     end
   end
