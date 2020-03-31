@@ -9,15 +9,26 @@ messages:
   error_color: 12000284
   finished_emoji: ':white_check_mark:'
   error_emoji: ':x:'
+  day_colors:
+    - 11943229
+    - 11974205
+    - 6075965
+    - 4044416
+    - 4027318
+    - 5258678
+    - 11943344
 meta:
-  name: Coronagenda
+  name: 105bot
   client_id: 690904891929133190
+  status: être meilleur que Pronote
   version: 0.7.0
-  illustration: https://cdn.discordapp.com/attachments/691715980354650143/691718390259384330/coconagenda.png
-  link: https://github.com/exybore/coronagenda
+  illustration: https://cdn.discordapp.com/app-icons/690904891929133190/32172d83058a5d6863a8473e06fc586e.png?size=64
+  link: https://github.com/exybore/105bot
 db:
   path: ./testing.sqlite
 server:
   role: Manager role's ID
+  weekly_message: Message that handles weekly events
   output_channel: Channel to output agenda
+  broadcast_channel: Channel to broadcast event notifications
   commands_channel: Channel where to execute commands

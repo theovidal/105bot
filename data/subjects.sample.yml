@@ -1,9 +1,18 @@
 french:
-  name: Français
+  name: French
   emoji: ':scroll:'
+  id: french
+  role: 666
+  illustration: https://cdn4.iconfinder.com/data/icons/school-subjects/256/Algebra-512.png
 maths:
-  name: Mathématiques
+  name: Maths
   emoji: ':1234:'
+  id: maths
+  role: 666
+  illustration: https://cdn4.iconfinder.com/data/icons/school-subjects/256/Algebra-512.png
 geography:
-  name: Géographie
+  name: Geography
   emoji: ':map:'
+  id: geography
+  role: 666
+  illustration: https://cdn4.iconfinder.com/data/icons/school-subjects/256/Algebra-512.png

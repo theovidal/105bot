@@ -27,12 +27,13 @@ client.message(start_with: Coronagenda::CONFIG['bot']['prefix']) do |event|
 end
 
 client.ready do
-  puts "Client running"
-  client.game = "#{Coronagenda::CONFIG['bot']['prefix']}help"
+  Discordrb::LOGGER.info("Client running")
+  client.game = Coronagenda::CONFIG['meta']['status']
   Thread.new do
     Timeloop.every Coronagenda::CONFIG['bot']['refresh_interval'].second do
       Discordrb::LOGGER.debug("Sending event notifications...")
-      Coronagenda::Utils.event_notification(client)
+      notifications_number = Coronagenda::Utils.event_notification(client)
+      Discordrb::LOGGER.debug("Sended #{notifications_number} notifications about upcoming events.")
     end
   end
 end
