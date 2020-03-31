@@ -1,6 +1,6 @@
 require_relative 'command'
 
-module Coronagenda
+module HundredFive
   module Commands
     class Remove < Command
       DESC = 'Retirer un devoir ou un événement'

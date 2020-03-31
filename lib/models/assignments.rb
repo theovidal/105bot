@@ -1,4 +1,4 @@
-module Coronagenda
+module HundredFive
   module Models
     class Assignments < Sequel::Model
       TYPES = %w(homework event weekly_event)

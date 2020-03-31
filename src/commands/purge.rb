@@ -1,6 +1,6 @@
 require_relative 'command'
 
-module Coronagenda
+module HundredFive
   module Commands
     class Purge < Command
       DESC = 'Supprimer les devoirs et événements passés'

@@ -1,6 +1,6 @@
 require_relative 'command'
 
-module Coronagenda
+module HundredFive
   module Commands
     class Help < Command
       DESC = "Obtenir de l'aide sur le robot (utilisation, commandes, matières...)"

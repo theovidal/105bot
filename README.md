@@ -1,6 +1,10 @@
-# Coronagenda
+<div align="center">
+    <h1>HundredFive</h1>
+    <h3>📆 Collaborative agenda on Discord 🤖</h3>
+</div>
 
-📆 Collaborative agenda on Discord
+- [📜 Credits](#-credits)
+- [🔐 License](#-license)
 
 ## 📜 Credits
 

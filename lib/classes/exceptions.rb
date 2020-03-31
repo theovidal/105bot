@@ -1,9 +1,9 @@
-module Coronagenda
+module HundredFive
   class Exception < ::StandardError
   end
 
   module Classes
-    class ExecutionError < Coronagenda::Exception
+    class ExecutionError < HundredFive::Exception
       attr_reader :waiter
 
       def initialize(waiter, message)
@@ -12,10 +12,10 @@ module Coronagenda
       end
     end
 
-    class ArgumentError < Coronagenda::Exception
+    class ArgumentError < HundredFive::Exception
     end
 
-    class CommandParsingError < Coronagenda::Exception
+    class CommandParsingError < HundredFive::Exception
     end
   end
 end

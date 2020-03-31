@@ -1,4 +1,4 @@
-module Coronagenda
+module HundredFive
   module Commands
     class Command
       DESC = 'Socle des commandes'

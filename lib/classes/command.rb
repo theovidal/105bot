@@ -1,11 +1,11 @@
-module Coronagenda
+module HundredFive
   module Classes
     # Command class
     class Command
       # @return [String] command's name
       attr_reader :name
 
-      # @return [Coronagenda::Commands::Command] object associated with the command
+      # @return [HundredFive::Commands::Command] object associated with the command
       attr_reader :object
 
       # @return [String, nil] command's description

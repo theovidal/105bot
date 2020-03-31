@@ -1,6 +1,6 @@
 require_relative 'command'
 
-module Coronagenda
+module HundredFive
   module Commands
     class Refresh < Command
       DESC = "Rafraichir tout l'agenda visible"

@@ -2,7 +2,7 @@ require_relative 'lib/classes'
 require_relative 'lib/models/assignments'
 require_relative 'lib/models/messages'
 
-module Coronagenda
+module HundredFive
   class Bot
     # List of all the commands and their functions
     attr_reader :commands

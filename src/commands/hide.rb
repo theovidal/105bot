@@ -1,6 +1,6 @@
 require_relative 'command'
 
-module Coronagenda
+module HundredFive
   module Commands
     class Hide < Command
       DESC = 'Masquer les x derniers jours affichés'

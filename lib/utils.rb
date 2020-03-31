@@ -1,4 +1,4 @@
-module Coronagenda
+module HundredFive
   module Utils
     # Generate a Discord embed
     #

@@ -1,6 +1,6 @@
 require_relative 'storage'
 
-module Coronagenda
+module HundredFive
   CONFIG = load_yml('config')
 
   SUBJECTS = load_yml('subjects')

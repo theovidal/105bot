@@ -1,4 +1,4 @@
-module Coronagenda
+module HundredFive
   module Classes
     class Waiter
       attr_reader :text

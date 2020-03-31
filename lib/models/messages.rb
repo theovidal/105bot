@@ -1,4 +1,4 @@
-module Coronagenda
+module HundredFive
   module Models
     class Messages < Sequel::Model
       def self.refresh(context, message)
