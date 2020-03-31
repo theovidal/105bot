@@ -47,7 +47,7 @@ module Coronagenda
           client.channel(CONFIG['server']['broadcast_channel']).send_embed(role.mention, Utils.embed(
             title: ':bell: Un événement va commencer',
             color: role.color.combined,
-            description: "#{subject['emoji']} #{subject['name']} : #{event.text}",
+            description: "#{subject['emoji']} #{subject['name']} : #{event.text.gsub('\\n', "\n")}",
             thumbnail: Discordrb::Webhooks::EmbedThumbnail.new(
               url: subject['illustration']
             )
