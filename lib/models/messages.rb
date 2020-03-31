@@ -10,7 +10,7 @@ module Coronagenda
           if assignment[:type] == 'homework'
             homework << Models::Assignments.prettify(assignment)
           else
-            events << Models::Assignments.prettify(assignment)
+            events << Models::Assignments.prettify(assignment) unless assignment[:is_weekly]
           end
         end
 

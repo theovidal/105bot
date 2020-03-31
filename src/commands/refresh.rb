@@ -11,6 +11,7 @@ module Coronagenda
         Models::Messages.all.each do |message|
           Models::Messages.refresh(context, message)
         end
+        Models::Assignments.refresh_weekly(context)
         waiter.finish("Rafraîchissement de l'agenda effectué.")
       end
     end

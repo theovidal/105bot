@@ -26,7 +26,7 @@ module Coronagenda
           default: nil
         },
         type: {
-          description: 'Type de la tâche : `homework` pour un devoir; `event` pour un événement',
+          description: 'Type de la tâche : `homework` pour un devoir; `event` pour un événement; `weekly_event` pour un événement hebdomadaire',
           type: String,
           default: 'homework'
         },
@@ -60,13 +60,16 @@ module Coronagenda
           assignment.date = date
           assignment.hour = args[:hour] if args[:hour] != 0
           assignment.subject = args[:subject]
-          assignment.type = args[:type]
+          assignment.type = args[:type] == 'weekly_event' ? 'event' : args[:type]
           assignment.link = args[:link] if args[:link] != '0'
           assignment.text = args[:text]
+          assignment.is_weekly = args[:type] == 'weekly_event'
         end
 
         message = Models::Messages.from_day(date)
         Models::Messages.refresh(context, message) if message != nil
+        Models::Assignments.refresh_weekly(context) if args[:type] == 'weekly_event'
+
         waiter.finish("Ajout #{pretty_type} à l'agenda effectué.", "Vous ne le voyez pas ? Essayez d'afficher davantage de jours via la commande `#{CONFIG['bot']['prefix']}show` !")
       end
     end

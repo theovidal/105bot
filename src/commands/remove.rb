@@ -6,17 +6,17 @@ module Coronagenda
       DESC = 'Retirer un devoir ou un événement'
       ARGS = {
         day: {
-          description: 'Jour de la tâche',
+          description: 'Jour de la tâche (laisser vide pour un événement hebdomadaire)',
           type: Integer,
           default: Date.today.day
         },
         month: {
-          description: 'Mois de la tâche',
+          description: 'Mois de la tâche (laisser vide pour un événement hebdomadaire)',
           type: Integer,
           default: Date.today.month
         },
         type: {
-          description: 'Type de la tâche : `homework` pour un devoir; `event` pour un événement',
+          description: 'Type de la tâche : `homework` pour un devoir; `event` pour un événement; `weekly_event` pour un événement hebdomadaire',
           type: String,
           default: 'homework'
         },
@@ -41,14 +41,19 @@ module Coronagenda
           raise Classes::ExecutionError.new(waiter, 'la date est incorrecte.')
         end
 
-        assignments = Models::Assignments.from_day(date).select{|a| a.type == args[:type]}
+        is_weekly = args[:type] == 'weekly_event'
+        assignments = is_weekly ? Models::Assignments.where(is_weekly: true).all : Models::Assignments.from_day(date).select{ |a| a.type == args[:type] }
 
         assignment = assignments[args[:index]]
         raise Classes::ExecutionError.new(waiter, "le numéro #{pretty_type} est incorrect.") if assignment.nil?
 
         assignment.delete
-        message = Models::Messages.from_day(date)
-        Models::Messages.refresh(context, message) if message != nil
+        if is_weekly
+          Models::Assignments.refresh_weekly(context)
+        else
+          message = Models::Messages.from_day(date)
+          Models::Messages.refresh(context, message) if message != nil
+        end
 
         waiter.finish("Suppression #{pretty_type} de l'agenda effectué.")
       end
