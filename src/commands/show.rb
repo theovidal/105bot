@@ -24,10 +24,11 @@ module HundredFive
         waiter = Classes::Waiter.new(context, ":inbox_tray: Affichage #{add_str} sur l'agenda, veuillez patienter...")
 
         last = Models::Messages.last
+        day_delay = 0
         args[:number].to_i.times do |i|
-          date = last[:date] + i + 1
+          date = last[:date] + i + day_delay + 1
           if date.wday == 0 || date.wday == 6
-            i += 1
+            day_delay += 1
             redo
           end
           discord = context.bot.send_message(CONFIG['server']['output_channel'], date)
