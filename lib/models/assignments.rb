@@ -8,7 +8,7 @@ module HundredFive
         if assignment.type == 'homework'
           due = assignment[:hour] != nil ? "(rendu avant #{assignment[:hour]}h)" : ''
         else
-          due = "(#{DAYS[assignment[:date].wday] + ' ' if weekly}à #{assignment[:hour]}h)"
+          due = "(à #{assignment[:hour]}h)"
         end
         output = "• #{subject['emoji']} #{subject['name']} : #{assignment[:text].gsub('\\n', "\n")} #{due}\n"
         unless assignment[:link] == nil
@@ -19,16 +19,26 @@ module HundredFive
 
       def self.refresh_weekly(context)
         msg = context.bot.channel(CONFIG['server']['output_channel']).message(CONFIG['server']['weekly_message'])
-        events = Assignments.where(is_weekly: 1)
 
-        content = ''
-        events.each do |event|
-          content << Assignments.prettify(event, true)
+        days = []
+        6.times do |wday|
+          events = Assignments.where(is_weekly: 1).all.select{ |a| a[:date].wday == wday }
+          next if events.length == 0
+
+          content = ''
+          events.each do |event|
+            content << Assignments.prettify(event, true)
+          end
+
+          days.push(Discordrb::Webhooks::EmbedField.new(
+            name: ":calendar_spiral: #{DAYS[wday]}",
+            value: content
+          ))
         end
 
         msg.edit('', Utils.embed(
           title: '🔔📌 Événements hebdomadaires',
-          description: content
+          fields: days
         ))
       end
 
