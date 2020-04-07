@@ -15,7 +15,7 @@ module HundredFive
           message.delete
         end
 
-        assignments = Models::Assignments.all.select { |a| a[:date] < Date.today }
+        assignments = Models::Assignments.all.select { |a| a[:date] < Date.today && !a[:is_weekly] }
         assignments.each { |assignment| assignment.delete }
 
         waiter.finish("Retrait des devoirs et événements passés effectué.")
