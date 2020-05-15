@@ -28,7 +28,7 @@
 - Add weekly events, that repeat themselves on a specific day, and still get benefit of notifications
 - Let many people maintain a single agenda - Stay organized collectively!
 
-TL;DR : an agenda with work and events on Discord!
+TL;DR: an agenda with work and events on Discord!
 
 ### Screenshots
 
@@ -39,17 +39,17 @@ TL;DR : an agenda with work and events on Discord!
 
 ## 👨‍💼 User guide
 
-Coming soon. Stay tunes!
+Coming soon. Stay tuned!
 
 ## 👨‍🏫 Administrator guide
 
-The bot isn't public _yet_, so there isn't any administrator !
+The bot isn't public _yet_, so there isn't any administrator!
 
 ## 👨‍💻 Developer guide
 
 Thank you for taking part in the development of this bot ! Please follow these instructions to get started.
 
-The project requires these dependencies :
+The project requires these dependencies:
 
 - Git, in any form
 - Ruby 2.6+
@@ -62,16 +62,16 @@ First of all, you must create a new app on the [Discord Developer portal](https:
 
 ### Installation
 
-Download the project on your computer using Git :
+Download the project on your computer using Git:
 
 ```bash
 git clone https://github.com/exybore/105bot.git  # HTTP
 git clone git@github.com:exybore/105bot          # SSH
 ```
 
-Go to the `data` folder, rename files to simply `x.yml` and edit them :
+Go to the `data` folder, rename files to simply `x.yml` and edit them:
 
-- the `config` file is the main configuration for the bot. Everything is here - from authentication, to functional, to design
+- the `config` file is the main configuration for the bot. Everything is here: from authentication, to functional, to design
 - the `strings` file serves as internationalization (i18n) in order to display information in the correct locale
 - the `subjects` file lists available subjects
 
@@ -81,7 +81,7 @@ You can then run the bot by executing the `run.rb` script using Ruby.
 
 All the commands are located under the `src/commands` folder. They consist of a class inside the `Commands` module, extending the `Command` central class. Warning : every code you make must be located under the `HundredFile` module !
 
-The structure is the following :
+The structure is the following:
 
 ```ruby
 require_relative 'command'
