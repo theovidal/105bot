@@ -45,7 +45,7 @@ module HundredFive
           subject = SUBJECTS[event[:subject]]
           role = client.server(689125786460094548).role(subject['role'])
           client.channel(CONFIG['server']['broadcast_channel']).send_embed(role.mention, Utils.embed(
-            title: ':bell: Un événement va commencer',
+            title: ':bell: Un événement va débuter',
             color: role.color.combined,
             description: "#{subject['emoji']} #{subject['name']} : #{event.text.gsub('\\n', "\n")}",
             thumbnail: Discordrb::Webhooks::EmbedThumbnail.new(

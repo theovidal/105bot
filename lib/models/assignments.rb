@@ -52,13 +52,16 @@ module HundredFive
       def self.upcoming_events
         now = Time.now
         Assignments.all.select do |assignment|
-          return false if assignment.type == 'homework'
+          next if assignment.type == 'homework'
+
           date = assignment[:date]
           time = Time.new(date.year, date.month, date.day, assignment[:hour])
-          if assignment.type == 'weekly_event'
-            return false unless time.wday === now.wday
+
+          if assignment.is_weekly
+            next unless time.wday === now.wday
             time = Time.new(now.year, now.month, now.day, assignment[:hour])
           end
+
           time >= now && time <= now + CONFIG['bot']['refresh_interval']
         end
       end
