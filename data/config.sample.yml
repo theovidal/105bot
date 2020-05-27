@@ -3,6 +3,7 @@ bot:
   prefix: 'a:'
   debug: false
   refresh_interval: 600
+  crawler_folder: /path/to/crawler
 messages:
   color: 7976509
   wait_color: 2400200
