@@ -1,3 +1,4 @@
+require 'net/http'
 require_relative 'command'
 
 module HundredFive
@@ -18,17 +19,19 @@ module HundredFive
         waiter = Classes::Waiter.new(context, ":airplane_arriving: Importation des devoirs depuis Pronote, veuillez patienter...", "L'exécution de cette commande peut être plus ou moins longue, selon le nombre de devoirs à importer.")
 
         begin
-          crawler_file = File.read("#{CONFIG['bot']['crawler_folder']}/assignments.json")
-        rescue
-          raise Classes::ExecutionError.new(waiter, "une erreur s'est produite lors de l'ouverture du fichier du crawler. Vérifiez le chemin dans la configuration de 105bot.")
+          response = Net::HTTP.get_response(CONFIG['bot']['crawler']['host'], '/assignments', CONFIG['bot']['crawler']['port'])
+          case response.code.to_i
+          when 404 then raise Classes::ExecutionError.new(waiter, "l'adresse URL vers le crawler est inconnue. Veuillez la vérifier dans la configuration du robot.")
+          else nil
+          end
+        rescue SocketError
+          raise Classes::ExecutionError.new(waiter, "la connexion avec le crawler n'a pu s'effectuer. Vérifier son adresse dans la configuration du robot.")
         end
 
         imported = 0
 
-        assignments = JSON.parse(crawler_file)
+        assignments = JSON.parse(response.body)['data']
         assignments.each do |assignment|
-          p args[:acceptDuplicates]
-          p Models::Assignments.where(text: assignment['content']).first.nil?
           next unless Models::Assignments.where(text: assignment['content']).first.nil? || args[:acceptDuplicates]
 
           Models::Assignments.create do |model|
