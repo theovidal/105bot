@@ -18,6 +18,8 @@ client = Discordrb::Bot.new(
   client_id: HundredFive::CONFIG['meta']['client_id']
 )
 
+connected = false
+
 $bot = HundredFive::Bot.new(client)
 
 client.message(start_with: HundredFive::CONFIG['bot']['prefix']) do |event|
@@ -29,11 +31,17 @@ end
 client.ready do
   Discordrb::LOGGER.info("Client running")
   client.game = HundredFive::CONFIG['meta']['status']
-  Thread.new do
-    Timeloop.every HundredFive::CONFIG['bot']['refresh_interval'].second do
-      Discordrb::LOGGER.debug("Sending event notifications...")
+  connected = true
+end
+
+Thread.new do
+  Timeloop.every HundredFive::CONFIG['bot']['refresh_interval'].second do
+    if connected
+      Discordrb::LOGGER.debug('Sending event notifications...')
       notifications_number = HundredFive::Utils.event_notification(client)
       Discordrb::LOGGER.debug("Sended #{notifications_number} notifications about upcoming events.")
+    else
+      Discordrb::LOGGER.debug("Bot isn't connected - don't check for events")
     end
   end
 end
