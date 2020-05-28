@@ -19,7 +19,6 @@ module HundredFive
       }
 
       def self.exec(context, args)
-        args[:includeWeek] = !args[:includeWeek].zero?
         add_str = args[:number] == 1 ? "d'un jour supplémentaire" : "de #{args[:number]} jours supplémentaires"
         waiter = Classes::Waiter.new(context, ":inbox_tray: Affichage #{add_str} sur l'agenda, veuillez patienter...")
 

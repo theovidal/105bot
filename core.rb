@@ -35,7 +35,7 @@ module HundredFive
           gived.strip! unless gived.nil?
           if gived == '' || gived.nil?
             raise Classes::ArgumentError.new("`#{key}` est un argument obligatoire.") if arg[:default].nil?
-            parsed_args[key] = arg[:default]
+            parsed_args[key] = arg[:boolean].nil? ? arg[:default] : !arg[:default].zero?
           else
             unless arg[:type] == String
               begin
@@ -46,7 +46,7 @@ module HundredFive
             end
 
             gived = args[i..].join(',') unless arg[:extend].nil?
-            parsed_args[key] = gived
+            parsed_args[key] = arg[:boolean].nil? ? gived : !gived.zero?
           end
           i += 1
         end
