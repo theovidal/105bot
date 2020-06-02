@@ -17,6 +17,7 @@ module HundredFive
         end
 
         command_categories.each do |category, commands|
+          next if commands == ''
           context.author.pm.send_embed('', Utils.embed(
             title: ":#{CATEGORIES[category]['emoji']}: #{CATEGORIES[category]['name']}",
             description: commands

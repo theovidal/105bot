@@ -70,7 +70,14 @@ module HundredFive
           color: 12000284
         ))
       rescue Classes::ExecutionError => e
-        e.waiter.error("Erreur dans l'exécution de la commande : #{e.message}")
+        if e.waiter.nil?
+          context.send_embed('', Utils.embed(
+            description: "** #{CONFIG['messages']['error_emoji']} Erreur dans l'exécution de la commande : #{e.message}**",
+            color: 12000284
+          ))
+        else
+          e.waiter.error("Erreur dans l'exécution de la commande : #{e.message}")
+        end
       end
     end
 
