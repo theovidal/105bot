@@ -1,0 +1,9 @@
+agenda:
+  name: Agenda
+  emoji: calendar_spiral
+notes:
+  name: Notes
+  emoji: clipboard
+default:
+  name: Commandes basiques
+  emoji: gear

@@ -11,16 +11,20 @@ module HundredFive
       # @return [String, nil] command's description
       attr_reader :description
 
+      # @return [String, nil] command's category
+      attr_reader :category
+
       # @return [Hash] command's arguments
       attr_reader :args
 
       # Initialize the Command object
       #
       # @param data [Hash] command data
-      def initialize(name, object, description, args)
+      def initialize(name, object, description, category, args)
         @name        = name
         @object      = object
         @description = description
+        @category    = category
         @args = args
       end
 

@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Show < Command
       DESC = "Montrer l'agenda pour les x jours suivants le dernier message"
+      CATEGORY = 'agenda'
       ARGS = {
         number: {
           description: 'Nombre de jours à afficher',

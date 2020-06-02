@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Hide < Command
       DESC = 'Masquer les x derniers jours affichés'
+      CATEGORY = 'agenda'
       ARGS = {
         number: {
           description: 'Nombre de jours à masquer',

@@ -78,11 +78,12 @@ module HundredFive
             cmd_name,
             cmd,
             (cmd::DESC),
+            (cmd::CATEGORY),
             (cmd::ARGS)
           )
         end
       end
-      commands
+      command
     end
 
     # Load a command from the files

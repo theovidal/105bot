@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Purge < Command
       DESC = 'Supprimer les devoirs et événements passés'
+      CATEGORY = 'agenda'
       USAGE = 'purge'
 
       def self.exec(context, _)

@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Refresh < Command
       DESC = "Rafraichir tout l'agenda visible"
+      CATEGORY = 'agenda'
       USAGE = 'refresh'
 
       def self.exec(context, _)

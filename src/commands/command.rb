@@ -3,6 +3,7 @@ module HundredFive
     class Command
       DESC = 'Socle des commandes'
       USAGE = 'commande'
+      CATEGORY = 'default'
       ARGS = {}
 
       def self.exec(_, _)

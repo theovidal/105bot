@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Remove < Command
       DESC = 'Retirer un devoir ou un événement'
+      CATEGORY = 'agenda'
       ARGS = {
         day: {
           description: 'Jour de la tâche (laisser vide pour un événement hebdomadaire)',

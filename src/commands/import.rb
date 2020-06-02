@@ -5,6 +5,7 @@ module HundredFive
   module Commands
     class Import < Command
       DESC = 'Importer les devoirs de Pronote'
+      CATEGORY = 'agenda'
       USAGE = 'import'
       ARGS = {
         acceptDuplicates: {
