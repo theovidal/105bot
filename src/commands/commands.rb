@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Commands < Command
       DESC = 'Obtenir la liste des commandes disponibles sur le robot'
+      LISTEN = %w(private public)
 
       def self.exec(context, _)
         command_categories = {}

@@ -21,11 +21,19 @@ module HundredFive
     # @param args [Array<String>] list of arguments passed to the command
     # @param context [Discordrb::Event::MessageEvent] the command context
     def handle_command(command_name, args, context)
-      return unless context.channel.id == CONFIG['server']['commands_channel']
 
       begin
         command = @commands[command_name]
-        raise Classes::CommandParsingError.new("**:x: Vous n'avez pas la permission d'intéragir avec le robot.**\n\nContactez un administateur pour obtenir plus de détails.") unless context.author.role? CONFIG['server']['role']
+        p command
+        if context.channel.private?
+          return unless command.listen.include?('private')
+        else
+          return unless command.listen.include?('public')
+        end
+
+        unless context.channel.private?
+          raise Classes::CommandParsingError.new("**:x: Vous n'avez pas la permission d'intéragir avec le robot.**\n\nContactez un administateur pour obtenir plus de détails.") unless context.author.role? CONFIG['server']['role']
+        end
         raise Classes::CommandParsingError.new("**:question: La commande #{CONFIG['bot']['prefix']}#{command_name} est inconnue.**\n\nExécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées.") if command.nil?
 
         parsed_args = {}
@@ -79,11 +87,12 @@ module HundredFive
             cmd,
             (cmd::DESC),
             (cmd::CATEGORY),
+            (cmd::LISTEN),
             (cmd::ARGS)
           )
         end
       end
-      command
+      commands
     end
 
     # Load a command from the files

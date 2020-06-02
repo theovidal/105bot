@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Help < Command
       DESC = "Obtenir de l'aide sur l'utilisation du robot"
+      LISTEN = %w(private public)
 
       def self.exec(context, _args)
         context.author.pm.send_embed('', Utils.embed(

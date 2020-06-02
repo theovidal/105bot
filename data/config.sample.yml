@@ -34,4 +34,3 @@ server:
   weekly_message: Message that handles weekly events
   output_channel: Channel to output agenda
   broadcast_channel: Channel to broadcast event notifications
-  commands_channel: Channel where to execute commands

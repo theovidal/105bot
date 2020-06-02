@@ -5,6 +5,7 @@ module HundredFive
     class About < Command
       DESC = 'Obtenir les informations pratiques du robot'
       USAGE = 'about'
+      LISTEN = %w(private public)
       ARGS = {}
 
       def self.exec(context, _args)

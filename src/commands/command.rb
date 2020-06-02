@@ -4,6 +4,7 @@ module HundredFive
       DESC = 'Socle des commandes'
       USAGE = 'commande'
       CATEGORY = 'default'
+      LISTEN = %w(public)
       ARGS = {}
 
       def self.exec(_, _)

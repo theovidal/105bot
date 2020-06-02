@@ -4,6 +4,7 @@ module HundredFive
   module Commands
     class Subjects < Command
       DESC = "Obtenir la liste des matières disponibles sur l'agenda"
+      LISTEN = %w(private public)
       CATEGORY = 'agenda'
 
       def self.exec(context, _args)
