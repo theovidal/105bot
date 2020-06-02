@@ -28,9 +28,16 @@ module HundredFive
         channel_id = url_parts[-2]
         server_id = url_parts[-3]
 
+        raise Classes::ExecutionError.new(nil, "le lien vers le message est incorrect. Vérifiez de l'avoir correctement copié depuis Clic droit > Copier le lien du message") if message_id.nil? || channel_id.nil? || server_id.nil?
+
         server = context.bot.server(server_id)
+        raise Classes::ExecutionError.new(nil, "le serveur Discord est inconnu. Vérifiez d'avoir correctement copié le lien depuis Clic droit > Copier le lien du message") if server.nil?
+
         channel = context.bot.channel(channel_id)
+        raise Classes::ExecutionError.new(nil, "le salon textuel est inconnu. Vérifiez d'avoir correctement copié le lien depuis Clic droit > Copier le lien du message") if channel.nil?
+
         message = channel.message(message_id)
+        raise Classes::ExecutionError.new(nil, "le message source est inconnu. Vérifiez d'avoir correctement copié le lien depuis Clic droit > Copier le lien du message") if message.nil?
 
         author = server.member(message.author.id)
         annotator = server.member(context.author.id)
@@ -68,7 +75,7 @@ module HundredFive
         context.send_embed('', Utils.embed(
           title: ':warning: Attention',
           description: "Ne supprimez ni votre message, ni celui de la personne ! Si vous le faites, les fichiers ne seront plus accessibles via les liens de l'annotation.",
-          color: CONFIG['messages']['color']
+          color: CONFIG['messages']['error_color']
         ))
       end
     end
