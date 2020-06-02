@@ -1,7 +1,7 @@
 module HundredFive
   module Classes
     class Waiter
-      attr_reader :text
+      attr_reader :text, :msg
 
       def initialize(context, text, subtext = '')
         @context = context
