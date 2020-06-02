@@ -30,7 +30,7 @@ meta:
 db:
   path: ./testing.sqlite
 server:
-  role: Manager role's ID
+  roles: [role1, role2, role3, ...]
   weekly_message: Message that handles weekly events
   output_channel: Channel to output agenda
   broadcast_channel: Channel to broadcast event notifications

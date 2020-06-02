@@ -32,7 +32,11 @@ module HundredFive
         end
 
         unless context.channel.private?
-          raise Classes::CommandParsingError.new("**:x: Vous n'avez pas la permission d'intéragir avec le robot.**\n\nContactez un administateur pour obtenir plus de détails.") unless context.author.role? CONFIG['server']['role']
+          authorized = false
+          context.user.roles.each do |role|
+            authorized = true if CONFIG['server']['roles'].include?(role.id)
+          end
+          raise Classes::CommandParsingError.new("**:x: Vous n'avez pas la permission d'intéragir avec le robot.**\n\nContactez un administateur pour obtenir plus de détails.") unless authorized
         end
         raise Classes::CommandParsingError.new("**:question: La commande #{CONFIG['bot']['prefix']}#{command_name} est inconnue.**\n\nExécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées.") if command.nil?
 
