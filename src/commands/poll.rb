@@ -11,6 +11,11 @@ module HundredFive
           type: String,
           default: nil,
         },
+        type: {
+          description: 'Thème pour les réactions. Valeur possibles : shapes, numbers, letters, food, faces, transportation',
+          type: String,
+          default: 'shapes'
+        },
         options: {
           description: 'Options du sondage, séparées par une virgule (20 maximum)',
           type: String,
@@ -19,7 +24,15 @@ module HundredFive
         }
       }
 
-      OPTIONS = %w(🔴 🟤 🟠 🟣 🟡 🔵 🟢 ⚫ ⚪ 🟥 🟫 🟧 🟪 🟨 🟦 🟩 ⬛ ⬜ 🔶 🔺)
+      OPTIONS = {
+        'shapes' => %w(🔴 🟤 🟠 🟣 🟡 🔵 🟢 ⚫ ⚪ 🟥 🟫 🟧 🟪 🟨 🟦 🟩 ⬛ ⬜ 🔶 🔺),
+        'numbers' => %w(0️⃣ 1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣ 🔟),
+        'letters' => %w(🇦 🇧 🇨 🇩 🇪 🇫 🇬 🇭 🇮 🇯 🇰 🇱 🇲 🇳 🇴 🇵 🇶 🇷 🇸 🇹),
+        'food' => %w(🍎 🍍 🍇 🥐 🥗 🥪 🍕 🥓 🍜 🥘 🍧 🍩 🍰 🍬 🍭 ☕ 🧃 🍵 🍾 🍸),
+        'faces' => %w(😄 😋 😎 😂 🥰 😎 🤔 🙄 😑 🤨 😮 😴 😛 😤 🤑 😭 😨 🥵 🥶 😷),
+        'animals' => %w(🐔 🐴 🐸 🐷 🐗 🐰 🐹 🦊 🐶 🐼 🦓 🐁 🐘 🐢 🐍 🐳 🦐 🐠 🦢 🦜),
+        'transportation' => %w(🚗 🚓 🚌 🚚 🚜 🚅 🚋 🚇 🚠 ✈ 🚁 🚀 🚢 🛹 🚲 🛴 🛵 🚑 🚒 🦽)
+      }
 
       def self.exec(context, args)
         options = args[:options].split(',')
@@ -27,7 +40,10 @@ module HundredFive
 
         context.message.delete
 
-        emojis = OPTIONS[0..(options.length - 1)]
+        layout = OPTIONS[args[:type]]
+        raise Classes::ExecutionError.new(nil, "le type de réactions est incorrect. Faites `105:commands` pour voir la liste des réactions possibles.") if layout.nil?
+
+        emojis = layout[0..(options.length - 1)]
         description = ''
         options.each.with_index do |option, index|
           description << "#{emojis[index]} #{option}\n"
