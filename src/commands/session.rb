@@ -6,30 +6,56 @@ module HundredFive
       DESC = 'Démarrer une session de participation sur Discord'
       CATEGORY = 'notes'
 
+      INTERACTIONS = %w(🙋 🔊 📑 🛑)
+      REACTIONS = %w(✅ ❌ 🙂 🤔 🙁 😮)
+
       def self.exec(context, _)
         context.message.delete
-        waiter = Classes::Waiter.new(context, ":microphone2: Session en cours par #{context.user.nick}", "Réagissez à ce message avec l'émoticone :raising_hand: pour demander la parole. Le gérant de la session peut l'arrêter en réagissant avec l'émoticone :stop_sign:.")
-        waiter.msg.react('🙋')
-        waiter.msg.react('🔊')
-        waiter.msg.react('🛑')
+        waiter = Classes::Waiter.new(context, ":microphone2: Session en cours par #{context.user.nick}", "Préparation de la session, veuillez patienter...")
+        (REACTIONS + INTERACTIONS).each { |interaction| waiter.msg.react(interaction) }
         waiter.msg.pin()
 
+        waiter.edit_subtext("Demandez la parole avec l'émoticône :raising_hand: ou réagissez avec les autres. Le gérant de la session peut l'arrêter en réagissant avec l'émoticone :stop_sign:.")
         tts = false
         loop do
           event = context.bot.add_await!(Discordrb::Events::ReactionAddEvent)
           next unless event.channel.id == context.channel.id
+
           is_host = event.user.id == context.user.id
-          case event.emoji.name
+          reaction = event.emoji.name
+
+          case reaction
           when '🙋'
             context.send("#{context.user.mention} Participation demandée par #{event.user.mention}", tts)
+          when '📑'
+            fields = []
+            message = context.channel.message(waiter.msg.id)
+            message.reactions.each do |emoji, object|
+              next unless REACTIONS.include? emoji
+              next if object.count < 2
+
+              reactors = message.reacted_with(emoji).collect { |u| context.server.member(u.id).nick }
+              fields << Discordrb::Webhooks::EmbedField.new(
+                name: "#{emoji} : #{object.count - 1}",
+                value: reactors.join(', ').chomp(', ')
+              )
+            end
+            context.user.pm.send_embed('', Utils.embed(
+              title: "📑 Bilan des réactions",
+              fields: fields,
+              author: Discordrb::Webhooks::EmbedAuthor.new(
+                icon_url: context.user.avatar_url,
+                name: context.user.nick
+              )
+            ))
           when '🔊'
             if is_host
               tts = !tts
               emoji = tts ? ':loud_sound:' : ':mute:'
               state = tts ? 'activé' : 'désactivé'
-              context.send("#{emoji} #{context.user.mention} Son #{state} pour les demandes de participation.")
+              context.user.pm.send_message("#{emoji} Son **#{state}** pour les demandes de participation.")
             else
-              event.user.pm.send_message(":x: **Vous ne pouvez pas modifier le son de la session, car vous n'en êtes pas le propriétaire.**")
+              event.user.pm.send_message(":x: **Vous ne pouvez pas modifier le son de la session, car vous n'en êtes pas le propriétaire. Contactez l'hôte pour faire une demande à ce propos.**")
             end
           when '🛑'
             if is_host
@@ -37,9 +63,10 @@ module HundredFive
               waiter.finish(":door: La session avec #{context.user.nick} est désormais terminée.")
               break
             else
-              event.user.pm.send_message(":x: **Vous ne pouvez pas fermer la session de #{context.user.nick}, car vous n'en êtes pas le propriétaire.**")
+              event.user.pm.send_message(":x: **Vous ne pouvez pas fermer la session de #{context.user.nick}, car vous n'en êtes pas le propriétaire. Contactez l'hôte pour faire une demande à ce propos.**")
             end
           else
+            next if REACTIONS.include? reaction
             event.user.pm.send_message(":question: Réaction inconnue. Merci de réagir à l'aide de celles déjà disponibles.")
           end
           waiter.msg.delete_reaction(event.user, event.emoji.name)
