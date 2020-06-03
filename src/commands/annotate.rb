@@ -63,11 +63,11 @@ module HundredFive
         )) unless sent_files == ''
 
         channel.send_embed('', Utils.embed(
-          title: ":memo: Annotation de #{annotator.nick}",
+          title: ":memo: Annotation de #{annotator.display_name}",
           description: args[:text],
           author: Discordrb::Webhooks::EmbedAuthor.new(
             icon_url: author.avatar_url,
-            name: author.nick
+            name: author.display_name
           ),
           fields: fields
         ))

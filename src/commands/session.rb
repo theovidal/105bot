@@ -11,7 +11,7 @@ module HundredFive
 
       def self.exec(context, _)
         context.message.delete
-        waiter = Classes::Waiter.new(context, ":microphone2: Session en cours par #{context.user.nick}", "Préparation de la session, veuillez patienter...")
+        waiter = Classes::Waiter.new(context, ":microphone2: Session en cours par #{context.user.display_name}", "Préparation de la session, veuillez patienter...")
         (REACTIONS + INTERACTIONS).each { |interaction| waiter.msg.react(interaction) }
         waiter.msg.pin()
 
@@ -34,18 +34,18 @@ module HundredFive
               next unless REACTIONS.include? emoji
               next if object.count < 2
 
-              reactors = message.reacted_with(emoji).collect { |u| context.server.member(u.id).nick }
+              reactors = message.reacted_with(emoji).collect { |u| context.server.member(u.id).display_name }
               fields << Discordrb::Webhooks::EmbedField.new(
                 name: "#{emoji} : #{object.count - 1}",
                 value: reactors.join(', ').chomp(', ')
               )
             end
-            context.user.pm.send_embed('', Utils.embed(
+            event.user.pm.send_embed('', Utils.embed(
               title: "📑 Bilan des réactions",
               fields: fields,
               author: Discordrb::Webhooks::EmbedAuthor.new(
                 icon_url: context.user.avatar_url,
-                name: context.user.nick
+                name: context.user.display_name
               )
             ))
           when '🔊'
@@ -60,10 +60,10 @@ module HundredFive
           when '🛑'
             if is_host
               waiter.msg.unpin()
-              waiter.finish(":door: La session avec #{context.user.nick} est désormais terminée.")
+              waiter.finish(":door: La session avec #{context.user.display_name} est désormais terminée.")
               break
             else
-              event.user.pm.send_message(":x: **Vous ne pouvez pas fermer la session de #{context.user.nick}, car vous n'en êtes pas le propriétaire. Contactez l'hôte pour faire une demande à ce propos.**")
+              event.user.pm.send_message(":x: **Vous ne pouvez pas fermer la session de #{context.user.display_name}, car vous n'en êtes pas le propriétaire. Contactez l'hôte pour faire une demande à ce propos.**")
             end
           else
             next if REACTIONS.include? reaction
