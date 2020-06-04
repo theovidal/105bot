@@ -23,7 +23,8 @@ messages:
 meta:
   name: 105bot
   client_id: 690904891929133190
-  status: être meilleur que Pronote
+  status: '105:help'
+  status_type: 3
   version: 0.7.0
   illustration: https://cdn.discordapp.com/app-icons/690904891929133190/32172d83058a5d6863a8473e06fc586e.png?size=64
   link: https://github.com/exybore/105bot
