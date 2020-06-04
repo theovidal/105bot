@@ -1,3 +1,9 @@
+GIT
+  remote: git@github.com:villins/snowflake-rb.git
+  revision: 0307cf10a9b0244e7cc6fd4a6bee5ab76aa94ebd
+  specs:
+    snowflake-rb (0.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -47,6 +53,7 @@ PLATFORMS
 DEPENDENCIES
   discordrb (~> 3.3)
   sequel (~> 5.30)
+  snowflake-rb!
   timeloop (~> 2.0)
 
 RUBY VERSION
