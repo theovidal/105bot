@@ -18,7 +18,14 @@ module HundredFive
         waiter.edit_subtext("Demandez la parole avec l'émoticône :raising_hand: ou réagissez avec les autres. Le gérant de la session peut l'arrêter en réagissant avec l'émoticone :stop_sign:.")
         tts = false
         loop do
-          event = context.bot.add_await!(Discordrb::Events::ReactionAddEvent)
+          event = context.bot.add_await!(Discordrb::Events::ReactionAddEvent, {
+            timeout: 60 * 60 * 12
+          })
+          if event.nil?
+            waiter.error(":door: La session de #{context.user.display_name} a expiré.")
+            waiter.msg.unpin()
+            break
+          end
           next unless event.channel.id == context.channel.id
 
           is_host = event.user.id == context.user.id
