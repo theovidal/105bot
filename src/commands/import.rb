@@ -68,7 +68,7 @@ module HundredFive
 
           Models::Assignments.create do |model|
             model.date = Time.at(timestamp)
-            model.subject = IMPORT_SUBJECTS[assignment['subject']]
+            model.subject = assignment['subject']
             model.type = 'homework'
             model.text = content
           end
