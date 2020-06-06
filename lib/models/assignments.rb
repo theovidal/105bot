@@ -1,24 +1,25 @@
 module HundredFive
   module Models
     class Assignments < Sequel::Model
-      TYPES = %w(homework event weekly_event)
+      TYPES = %w(work event weekly_event)
 
-      def self.prettify(assignment, weekly = false)
-        subject = SUBJECTS[assignment[:subject]]
-        if assignment.type == 'homework'
+      def self.prettify(assignment, weekly = true)
+        if assignment.type == 'work'
           due = assignment[:hour] != nil ? "(rendu avant #{assignment[:hour]}h)" : ''
         else
           due = "(à #{assignment[:hour]}h)"
         end
-        output = "• #{subject['emoji']} #{subject['name']} : #{assignment[:text].gsub('\\n', "\n")} #{due}\n"
-        unless assignment[:link] == nil
-          output << "#{assignment[:link]}\n"
-        end
+        output = "• "
+        output << "#{assignment[:subject]} : " unless assignment[:subject].nil?
+        output << "#{assignment[:text].gsub('\\n', "\n")} #{due}\n"
+        output << "#{assignment[:link]}\n" unless assignment[:link] == nil
+
         output
       end
 
-      def self.refresh_weekly(context)
-        msg = context.bot.channel(CONFIG['server']['output_channel']).message(CONFIG['server']['weekly_message'])
+      def self.refresh_weekly(context, agenda)
+        model = Models::Messages.where(agenda: agenda, weekly: true).first
+        msg = context.channel.message(model[:message])
 
         days = []
         6.times do |wday|
@@ -42,17 +43,17 @@ module HundredFive
         ))
       end
 
-      def self.from_day(day)
+      def self.from_day(agenda, day)
         if day.is_a? Array
           day = Date.new(2020, day[1], day[0])
         end
-        Assignments.all.select { |a| a[:date] == day }
+        Assignments.all.select { |a| a[:date] == day && a[:agenda] == agenda }
       end
 
       def self.upcoming_events
         now = Time.now
         Assignments.all.select do |assignment|
-          next if assignment.type == 'homework'
+          next if assignment.type == 'work'
 
           date = assignment[:date]
           time = Time.new(date.year, date.month, date.day, assignment[:hour])

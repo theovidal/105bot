@@ -1,4 +1,5 @@
 require_relative 'lib/classes'
+require_relative 'lib/models/agendas'
 require_relative 'lib/models/assignments'
 require_relative 'lib/models/messages'
 
@@ -24,7 +25,6 @@ module HundredFive
 
       begin
         command = @commands[command_name]
-        p command
         if context.channel.private?
           return unless command.listen.include?('private')
         else

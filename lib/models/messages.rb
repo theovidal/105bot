@@ -1,8 +1,8 @@
 module HundredFive
   module Models
     class Messages < Sequel::Model
-      def self.refresh(context, message)
-        assignments = Models::Assignments.from_day(message[:date])
+      def self.refresh(context, agenda, message)
+        assignments = Models::Assignments.from_day(agenda[:snowflake], message[:date])
         homework = ''
         events = ''
 
@@ -20,7 +20,7 @@ module HundredFive
         date = message[:date]
         day = date.day == 1 ? '1er' : date.day
 
-        context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).edit('', Utils.embed(
+        context.channel.message(message[:message]).edit('', Utils.embed(
           title: ":calendar_spiral: #{DAYS[date.wday]} #{day} #{MONTHS[date.month - 1]} #{date.year}",
           color: CONFIG['messages']['day_colors'][date.wday],
           fields: [
@@ -36,11 +36,11 @@ module HundredFive
         ))
       end
 
-      def self.from_day(day)
+      def self.from_day(agenda, day)
         if day.is_a? Array
           day = Date.new(2020, day[1], day[0])
         end
-        Messages.all.select { |m| m[:date] == day }.first
+        Messages.all.select { |m| m[:date] == day && m[:agenda] == agenda }.first
       end
     end
   end
