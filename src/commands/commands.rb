@@ -1,5 +1,3 @@
-require_relative 'command'
-
 module HundredFive
   module Commands
     class Commands < Command
@@ -13,8 +11,7 @@ module HundredFive
         end
 
         $bot.commands.each do |_index, command|
-          command_categories[command.category] << command.to_s
-          command_categories << "\n"
+          command_categories[command.category] << "#{command.to_s}\n"
         end
 
         command_categories.each do |category, commands|
