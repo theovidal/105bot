@@ -1,42 +1,48 @@
 module HundredFive
   module Classes
     class Waiter
-      attr_reader :text, :msg
+      attr_reader :message
 
-      def initialize(context, text, subtext = '')
+      def initialize(context, set_wait = true)
         @context = context
-        @text = text
-        @subtext = subtext
-        @color = CONFIG['messages']['wait_color']
-        @msg = context.send_embed('', generate_msg)
+        @message = context.message
+        wait if set_wait
       end
 
-      def edit_subtext(text)
-        @subtext = text
-        @msg.edit('', generate_msg)
+      def action_needed
+        set_reaction('📬')
       end
 
-      def finish(text, subtext = '')
-        @text = "#{CONFIG['messages']['finished_emoji']} #{text}"
-        @subtext = subtext
-        @color = CONFIG['messages']['color']
-        @msg.edit('', generate_msg)
+      def wait
+        set_reaction('🔄')
       end
 
-      def error(text, subtext = '')
-        @text = "#{CONFIG['messages']['error_emoji']} #{text}"
-        @subtext = subtext
-        @color = CONFIG['messages']['error_color']
-        @msg.edit('', generate_msg)
+      def finish
+        set_reaction('✅')
+        delete_message
+      end
+
+      def error(text, subtext = nil)
+        set_reaction('❌')
+
+        @context.author.pm.send_embed('', Utils.embed(
+          description: "**#{text}**\n\n#{subtext}",
+          color: CONFIG['messages']['error_color']
+        ))
       end
 
       private
 
-      def generate_msg
-        Utils.embed(
-          description: "**#@text**\n\n#@subtext",
-          color: @color
-        )
+      def set_reaction(emoji)
+        @message.delete_all_reactions unless @context.channel.private?
+        @message.react(emoji)
+      end
+
+      def delete_message
+        unless @context.channel.private?
+          sleep(3)
+          @message.delete
+        end
       end
     end
   end
