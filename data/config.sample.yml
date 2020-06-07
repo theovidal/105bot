@@ -1,6 +1,6 @@
 bot:
   token: Bot's token
-  prefix: 'a:'
+  prefix: '105:'
   debug: false
   refresh_interval: 600
 pronote:
@@ -25,13 +25,10 @@ meta:
   client_id: 690904891929133190
   status: '105:help'
   status_type: 3
-  version: 0.7.0
+  version: 1.0.0-beta4
   illustration: https://cdn.discordapp.com/app-icons/690904891929133190/32172d83058a5d6863a8473e06fc586e.png?size=64
   link: https://github.com/exybore/105bot
 db:
   path: ./testing.sqlite
 server:
   roles: [role1, role2, role3, ...]
-  weekly_message: Message that handles weekly events
-  output_channel: Channel to output agenda
-  broadcast_channel: Channel to broadcast event notifications

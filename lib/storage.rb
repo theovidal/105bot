@@ -1,3 +1,5 @@
+require 'psych'
+
 # Loads a YAML file from data
 #
 # @param name [String] file's name

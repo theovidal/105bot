@@ -27,7 +27,12 @@ module HundredFive
 
       # Initialize the Command object
       #
-      # @param data [Hash] command data
+      # @param name [String] command's name
+      # @param object [HundredFive::Commands::Command] command's object
+      # @param description [String] command's description
+      # @param category [String] command's category
+      # @param listen [Array<String>] where to listen the command
+      # @param args [Hash<Symbol, Hash<unknown>>] arguments to pass to the command
       def initialize(name, object, description, category, listen, args)
         @name        = name
         @object      = object
@@ -49,7 +54,10 @@ module HundredFive
             parsed_args << "\n"
           end
         end
-        "**• `#{CONFIG['bot']['prefix']}#@name` : #@description**\n#{parsed_args}S'exécute en #{@listen.map {|mode| LISTEN[mode]}.join(' et ')}\n"
+        output = "**• `#{CONFIG['bot']['prefix']}#@name` : #@description**\n"
+        output << parsed_args
+        output << "S'exécute en #{@listen.map {|mode| LISTEN[mode]}.join(' et ')}\n"
+        output
       end
     end
   end

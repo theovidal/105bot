@@ -1,3 +1,4 @@
+require 'psych'
 require_relative 'storage'
 
 module HundredFive

@@ -36,9 +36,15 @@ module HundredFive
           context.user.roles.each do |role|
             authorized = true if CONFIG['server']['roles'].include?(role.id)
           end
-          raise Classes::CommandParsingError.new("**:x: Vous n'avez pas la permission d'intéragir avec le robot.**\n\nContactez un administateur pour obtenir plus de détails.") unless authorized
+          raise Classes::CommandParsingError.new(
+            "**:x: Vous n'avez pas la permission d'intéragir avec le robot.**\n\n" +
+            "Contactez un administateur pour obtenir plus de détails."
+          ) unless authorized
         end
-        raise Classes::CommandParsingError.new("**:question: La commande #{CONFIG['bot']['prefix']}#{command_name} est inconnue.**\n\nExécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées.") if command.nil?
+        raise Classes::CommandParsingError.new(
+          "**:question: La commande #{CONFIG['bot']['prefix']}#{command_name} est inconnue.**\n\n" +
+          "Exécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées."
+        ) if command.nil?
 
         parsed_args = {}
         i = 0
@@ -69,14 +75,17 @@ module HundredFive
           color: 12000284
         ))
       rescue Classes::ArgumentError => e
-        context.send_embed('', Utils.embed(
-          description: "**#{CONFIG['messages']['error_emoji']} Erreur dans les arguments : #{e.message}**\n\nPour en savoir plus sur les commandes et leurs arguments, exécutez `#{CONFIG['bot']['prefix']}help`.",
+        context.author.pm.send_embed('', Utils.embed(
+          description:
+            "**#{CONFIG['messages']['error_emoji']} Erreur dans les arguments de la commande : #{e.message}**\n\n" +
+            "Pour en savoir plus sur les commandes et leurs arguments, exécutez `#{CONFIG['bot']['prefix']}help`.",
           color: 12000284
         ))
       rescue Classes::ExecutionError => e
         if e.waiter.nil?
-          context.send_embed('', Utils.embed(
-            description: "** #{CONFIG['messages']['error_emoji']} Erreur dans l'exécution de la commande : #{e.message}**",
+          context.author.pm.send_embed('', Utils.embed(
+            description:
+              "**#{CONFIG['messages']['error_emoji']} Erreur dans l'exécution de la commande : #{e.message}**",
             color: 12000284
           ))
         else

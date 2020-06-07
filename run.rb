@@ -1,8 +1,5 @@
-require 'discordrb'
 require 'sequel'
-require 'psych'
 require 'date'
-require 'timeloop'
 require 'main'
 require 'snowflake-rb'
 
@@ -17,6 +14,9 @@ require_relative 'core'
 Main do
   mode 'start' do
     def run
+      require 'discordrb'
+      require 'timeloop'
+
       client = Discordrb::Bot.new(
         token: HundredFive::CONFIG['bot']['token'],
         log_mode: HundredFive::CONFIG['bot']['debug'] ? :debug : :quiet,
@@ -35,8 +35,15 @@ Main do
       end
 
       client.ready do
-        Discordrb::LOGGER.info("Client running")
-        client.update_status('online', HundredFive::CONFIG['meta']['status'], nil, 0, false, HundredFive::CONFIG['meta']['status_type'])
+        Discordrb::LOGGER.info("Connected as #{client.profile.name}")
+        client.update_status(
+          'online',
+          HundredFive::CONFIG['meta']['status'],
+          nil,
+          0,
+          false,
+          HundredFive::CONFIG['meta']['status_type']
+        )
         connected = true
       end
 

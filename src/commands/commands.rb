@@ -4,7 +4,7 @@ module HundredFive
   module Commands
     class Commands < Command
       DESC = 'Obtenir la liste des commandes disponibles sur le robot'
-      LISTEN = %w(private public)
+      LISTEN = %w[private public]
 
       def self.exec(context, _)
         command_categories = {}
@@ -13,7 +13,8 @@ module HundredFive
         end
 
         $bot.commands.each do |_index, command|
-          command_categories[command.category] << "#{command.to_s}\n"
+          command_categories[command.category] << command.to_s
+          command_categories << "\n"
         end
 
         command_categories.each do |category, commands|

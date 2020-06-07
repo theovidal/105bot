@@ -4,7 +4,7 @@ module HundredFive
   module Commands
     class Annotate < Command
       DESC = 'Annoter une copie envoyée dans un salon textuel'
-      LISTEN = %w(private)
+      LISTEN = %w[private]
       CATEGORY = 'notes'
       ARGS = {
         link: {
