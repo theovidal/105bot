@@ -7,7 +7,7 @@ module HundredFive
         events = ''
 
         assignments.each do |assignment|
-          if assignment[:type] == 'homework'
+          if assignment[:type] == 'work'
             homework << Models::Assignments.prettify(assignment)
           else
             events << Models::Assignments.prettify(assignment) unless assignment[:is_weekly]
@@ -15,7 +15,7 @@ module HundredFive
         end
 
         events = "*Aucun événement n'est prévu ce jour*" if events == ''
-        homework = "*Aucun devoir n'est à faire pour ce jour*" if homework == ''
+        homework = "*Aucun travail n'est à faire pour ce jour*" if homework == ''
 
         date = message[:date]
         day = date.day == 1 ? '1er' : date.day
@@ -29,10 +29,36 @@ module HundredFive
               value: events
             ),
             Discordrb::Webhooks::EmbedField.new(
-              name: ':clipboard: Devoirs',
+              name: ':clipboard: Travaux',
               value: homework
             )
           ]
+        ))
+      end
+
+      def self.refresh_weekly(context, agenda)
+        model = Models::Messages.where(agenda: agenda, weekly: true).first
+        msg = context.channel.message(model[:message])
+
+        days = []
+        6.times do |wday|
+          events = Assignments.where(is_weekly: 1).all.select{ |a| a[:date].wday == wday }
+          next if events.length == 0
+
+          content = ''
+          events.each do |event|
+            content << Assignments.prettify(event, true)
+          end
+
+          days.push(Discordrb::Webhooks::EmbedField.new(
+            name: ":calendar_spiral: #{DAYS[wday]}",
+            value: content
+          ))
+        end
+
+        msg.edit('', Utils.embed(
+          title: '🔔📌 Événements hebdomadaires',
+          fields: days
         ))
       end
 
@@ -40,7 +66,18 @@ module HundredFive
         if day.is_a? Array
           day = Date.new(2020, day[1], day[0])
         end
-        Messages.all.select { |m| m[:date] == day && m[:agenda] == agenda }.first
+        Messages.from_agenda(agenda).where(date: day).first
+      end
+
+      def self.from_agenda(agenda)
+        Messages.where(agenda: agenda, weekly: false)
+      end
+
+      def self.delete_many(context, agenda, messages)
+        messages.each do |message|
+          context.bot.channel(agenda[:channel]).message(message[:message]).delete
+          message.delete
+        end
       end
     end
   end
