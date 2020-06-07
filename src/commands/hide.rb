@@ -14,21 +14,19 @@ module HundredFive
       }
 
       def self.exec(context, args)
-        last_str = args[:number] == 1 ? 'du dernier jour' : "des #{args[:number]} derniers jours"
-        waiter = Classes::Waiter.new(context, ":outbox_tray: Retrait #{last_str} de l'agenda, veuillez patienter...")
+        waiter = Classes::Waiter.new(context)
+
+        agenda = Models::Agendas.get(context, waiter)
 
         begin
-          messages = Models::Messages.reverse(:id).limit(args[:number])
+          messages = Models::Messages.from_agenda(agenda[:snowflake]).reverse(:id).limit(args[:number]).all
         rescue Sequel::Error
           raise Classes::ExecutionError.new(waiter, "le nombre #{args[:number]} est incorrect.")
         end
 
-        messages.each do |message|
-          context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).delete
-          message.delete
-        end
+        Models::Messages.delete_many(context, agenda, messages)
 
-        waiter.finish("Retrait #{last_str} de l'agenda effectué.")
+        waiter.finish
       end
     end
   end

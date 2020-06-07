@@ -3,23 +3,22 @@ require_relative 'command'
 module HundredFive
   module Commands
     class Purge < Command
-      DESC = 'Supprimer les devoirs et événements passés'
+      DESC = 'Supprimer les travaux et événements passés'
       CATEGORY = 'agenda'
       USAGE = 'purge'
 
       def self.exec(context, _)
-        waiter = Classes::Waiter.new(context, ":pirate_flag: Retrait des devoirs et événements passés, veuillez patienter...")
+        waiter = Classes::Waiter.new(context)
 
-        messages = Models::Messages.all.select { |m| m[:date] < Date.today }
-        messages.each do |message|
-          context.bot.channel(CONFIG['server']['output_channel']).message(message[:discord_id]).delete
-          message.delete
-        end
+        agenda = Models::Agendas.get(context, waiter)
 
-        assignments = Models::Assignments.all.select { |a| a[:date] < Date.today && !a[:is_weekly] }
+        messages = Models::Messages.from_agenda(agenda[:snowflake]){date < Date.today}.all
+        Models::Messages.delete_many(messages, agenda)
+
+        assignments = Models::Assignments.from_agenda(agenda[:snowflake]){date < Date.today}.all
         assignments.each { |assignment| assignment.delete }
 
-        waiter.finish("Retrait des devoirs et événements passés effectué.")
+        waiter.finish
       end
     end
   end

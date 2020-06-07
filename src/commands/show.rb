@@ -20,28 +20,32 @@ module HundredFive
       }
 
       def self.exec(context, args)
-        add_str = args[:number] == 1 ? "d'un jour supplémentaire" : "de #{args[:number]} jours supplémentaires"
-        waiter = Classes::Waiter.new(context, ":inbox_tray: Affichage #{add_str} sur l'agenda, veuillez patienter...")
+        waiter = Classes::Waiter.new(context)
 
-        last = Models::Messages.last
+        agenda = Models::Agendas.get(context, waiter)
+
+        last = Models::Messages.from_agenda(agenda[:snowflake]).last
+        start = last.nil? ? Date.today : last[:date]
         day_delay = 0
+
         args[:number].to_i.times do |i|
-          date = last[:date] + i + day_delay + 1
+          date = start + i + day_delay + 1
           if date.wday == 0 || date.wday == 6
             day_delay += 1
             redo
           end
-          discord = context.bot.send_message(CONFIG['server']['output_channel'], date)
+          output = context.send("--- GÉNÉRATION DU MESSAGE DE L'AGENDA ---")
 
           model = Models::Messages.create do |message|
+            message.agenda = agenda.snowflake
+            message.message = output.id
             message.date = date
-            message.discord_id = discord.id
           end
 
-          Models::Messages.refresh(context, model)
+          Models::Messages.refresh(context, agenda, model)
         end
 
-        waiter.finish("Affichage #{add_str} sur l'agenda effectué.")
+        waiter.finish
       end
     end
   end

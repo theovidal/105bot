@@ -17,9 +17,9 @@ module HundredFive
           default: Date.today.month
         },
         type: {
-          description: 'Type de la tâche : `homework` pour un devoir; `event` pour un événement; `weekly_event` pour un événement hebdomadaire',
+          description: 'Type de la tâche : `work` pour un travail; `event` pour un événement; `weekly_event` pour un événement hebdomadaire',
           type: String,
-          default: 'homework'
+          default: 'work'
         },
         index: {
           description: 'Numéro de la tâche dans la liste',
@@ -31,8 +31,8 @@ module HundredFive
       def self.exec(context, args)
         args[:index] -= 1
 
-        pretty_type = args[:type] == 'homework' ? 'du devoir' : "de l'événement"
-        waiter = Classes::Waiter.new(context, ":wastebasket: Suppression #{pretty_type} de l'agenda, veuillez patienter...")
+        pretty_type = args[:type] == 'work' ? 'du devoir' : "de l'événement"
+        waiter = Classes::Waiter.new(context)
 
         raise Classes::ExecutionError.new(waiter, "le type `#{args[:type]}` est inconnu.") unless Models::Assignments::TYPES.include? args[:type]
 
@@ -42,21 +42,26 @@ module HundredFive
           raise Classes::ExecutionError.new(waiter, 'la date est incorrecte.')
         end
 
+        agenda = Models::Agendas.get(context, waiter)
+
         is_weekly = args[:type] == 'weekly_event'
-        assignments = is_weekly ? Models::Assignments.where(is_weekly: true).all : Models::Assignments.from_day(date).select{ |a| a.type == args[:type] }
+        assignments = Models::Assignments.where(agenda: agenda[:snowflake])
+        assignments =
+          is_weekly ? assignments.where(is_weekly: true).all
+          : Models::Assignments.from_day(agenda[:snowflake], date).select{ |a| a[:type] == args[:type] }
 
         assignment = assignments[args[:index]]
         raise Classes::ExecutionError.new(waiter, "le numéro #{pretty_type} est incorrect.") if assignment.nil?
 
         assignment.delete
         if is_weekly
-          Models::Assignments.refresh_weekly(context)
+          Models::Messages.refresh_weekly(context, agenda)
         else
-          message = Models::Messages.from_day(date)
-          Models::Messages.refresh(context, message) if message != nil
+          message = Models::Messages.from_day(agenda[:snowflake], date)
+          Models::Messages.refresh(context, agenda, message) if message != nil
         end
 
-        waiter.finish("Suppression #{pretty_type} de l'agenda effectué.")
+        waiter.finish
       end
     end
   end
