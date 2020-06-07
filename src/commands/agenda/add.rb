@@ -1,5 +1,3 @@
-require_relative 'command'
-
 module HundredFive
   module Commands
     class Add < Command
@@ -21,15 +19,15 @@ module HundredFive
           type: Integer,
           default: 0
         },
-        subject: {
-          description: 'Sujet de la tâche',
-          type: String,
-          default: '0'
-        },
         type: {
           description: 'Type de la tâche : `work` pour un tavail ou devoir; `event` pour un événement; `weekly_event` pour un événement hebdomadaire',
           type: String,
           default: 'homework'
+        },
+        subject: {
+          description: 'Sujet de la tâche',
+          type: String,
+          default: '0'
         },
         link: {
           description: "Lien associé à la tâche (laisser vide s'il n'y en a pas)",

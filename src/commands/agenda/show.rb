@@ -1,5 +1,3 @@
-require_relative 'command'
-
 module HundredFive
   module Commands
     class Show < Command

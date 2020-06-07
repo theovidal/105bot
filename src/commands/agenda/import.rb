@@ -1,6 +1,3 @@
-require 'httparty'
-require_relative 'command'
-
 module HundredFive
   module Commands
     class Import < Command

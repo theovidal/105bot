@@ -24,6 +24,9 @@ module HundredFive
       # - default : a default value for the argument (nil if required)
       ARGS = {}
 
+      # @return [Boolean] if the command has subcommands
+      SUBCOMMANDS = false
+
       # Execute the requested command.
       #
       # @param context [Discordrb::Events::MessageEvent] The context in which the command is executed

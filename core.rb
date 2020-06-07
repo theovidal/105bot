@@ -18,13 +18,23 @@ module HundredFive
 
     # Trigger a command
     #
-    # @param command_name [String] command's name
+    # @param commands [Array<String>] the commands and subcommands passed
     # @param args [Array<String>] list of arguments passed to the command
     # @param context [Discordrb::Event::MessageEvent] the command context
-    def handle_command(command_name, args, context)
-
+    def handle_command(commands, args, context)
       begin
-        command = @commands[command_name]
+        command = nil
+        sub = false
+        commands.each do |input|
+          command = sub ? command.subcommands[input] : @commands[input]
+          raise Classes::CommandParsingError.new(
+            "**:question: La commande #{CONFIG['bot']['prefix']}#{input} est inconnue.**\n\n" +
+            "Exécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées."
+          ) if command.nil?
+          args = [] if input == args[0]
+          input == commands[-1] ? break : sub = true
+        end
+        p command
         if context.channel.private?
           return unless command.listen.include?('private')
         else
@@ -41,10 +51,6 @@ module HundredFive
             "Contactez un administateur pour obtenir plus de détails."
           ) unless authorized
         end
-        raise Classes::CommandParsingError.new(
-          "**:question: La commande #{CONFIG['bot']['prefix']}#{command_name} est inconnue.**\n\n" +
-          "Exécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées."
-        ) if command.nil?
 
         parsed_args = {}
         i = 0
@@ -95,20 +101,24 @@ module HundredFive
     end
 
     # List all the commands
-    def list_commands
+    def list_commands(base = 'commands')
       commands = {}
-      Dir["src/commands/*.rb"].each do |path|
+      Dir["src/#{base}/*.rb"].each do |path|
         resp = Regexp.new("([a-z0-9]+)\.rb$").match(path)
         if resp != nil && resp[1] != 'command'
           cmd_name = resp[1]
-          cmd = load_command(cmd_name)
+          cmd_path = "#{base}/#{cmd_name}"
+          cmd = load_command(cmd_path)
+          subcommands = cmd::SUBCOMMANDS ? list_commands(cmd_path) : {}
+
           commands[cmd_name] = Classes::Command.new(
             cmd_name,
             cmd,
             (cmd::DESC),
             (cmd::CATEGORY),
             (cmd::LISTEN),
-            (cmd::ARGS)
+            (cmd::ARGS),
+            subcommands
           )
         end
       end
@@ -119,8 +129,9 @@ module HundredFive
     #
     # @param command [String] the command's name
     def load_command(command)
-      require_relative "src/commands/#{command}"
-      eval("Commands::#{command.capitalize}")
+      require_relative "src/#{command}"
+      name = command.split('/')[-1]
+      eval("Commands::#{name.capitalize}")
     end
   end
 end

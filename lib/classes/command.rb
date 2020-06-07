@@ -20,6 +20,9 @@ module HundredFive
       # @return [Hash] command's arguments
       attr_reader :args
 
+      # @return [Hash]
+      attr_reader :subcommands
+
       LISTEN = {
         'public' => 'salon public',
         'private' => 'message privé'
@@ -33,13 +36,15 @@ module HundredFive
       # @param category [String] command's category
       # @param listen [Array<String>] where to listen the command
       # @param args [Hash<Symbol, Hash<unknown>>] arguments to pass to the command
-      def initialize(name, object, description, category, listen, args)
+      # @param subcommands [Hash<Symbol, Command>]
+      def initialize(name, object, description, category, listen, args, subcommands = {})
         @name        = name
         @object      = object
         @description = description
         @category    = category
         @listen = listen
         @args = args
+        @subcommands = subcommands
       end
 
       def to_s
