@@ -33,6 +33,7 @@ module HundredFive
             model.message = message.id
             model.weekly = true
           end
+          Models::Messages.refresh_weekly(context, snowflake)
           message.pin
 
           waiter.finish

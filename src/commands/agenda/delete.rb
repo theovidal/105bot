@@ -37,6 +37,8 @@ module HundredFive
           assignments = Models::Assignments.where(agenda: agenda[:snowflake])
           assignments.each { |assignment| assignment.delete }
 
+          agenda.delete
+
           waiter.finish
         end
       end
