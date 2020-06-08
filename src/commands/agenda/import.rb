@@ -17,9 +17,8 @@ module HundredFive
         }
 
         def self.exec(context, args)
+          agenda = Models::Agendas.get(context)
           public_waiter = Classes::Waiter.new(context, false)
-
-          agenda = Models::Agendas.get(context, public_waiter)
 
           public_waiter.action_needed
           context.author.pm.send_embed('', Utils.embed(

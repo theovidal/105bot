@@ -44,6 +44,7 @@ module HundredFive
         }
 
         def self.exec(context, args)
+          agenda = Models::Agendas.get(context)
           waiter = Classes::Waiter.new(context)
 
           raise Classes::ExecutionError.new(waiter, "le type `#{args[:type]}` est inconnu.") unless Models::Assignments::TYPES.include? args[:type]
@@ -53,8 +54,6 @@ module HundredFive
           rescue ArgumentError
             raise Classes::ExecutionError.new(waiter, 'la date est incorrecte.')
           end
-
-          agenda = Models::Agendas.get(context, waiter)
 
           Models::Assignments.create do |assignment|
             assignment.agenda = agenda[:snowflake]

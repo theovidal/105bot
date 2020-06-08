@@ -19,9 +19,8 @@ module HundredFive
         }
 
         def self.exec(context, args)
+          agenda = Models::Agendas.get(context)
           waiter = Classes::Waiter.new(context)
-
-          agenda = Models::Agendas.get(context, waiter)
 
           last = Models::Messages.from_agenda(agenda[:snowflake]).last
           start = last.nil? ? Date.today : last[:date]

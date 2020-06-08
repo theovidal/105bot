@@ -13,9 +13,8 @@ module HundredFive
         }
 
         def self.exec(context, args)
+          agenda = Models::Agendas.get(context)
           waiter = Classes::Waiter.new(context)
-
-          agenda = Models::Agendas.get(context, waiter)
 
           begin
             messages = Models::Messages.from_agenda(agenda[:snowflake]).reverse(:id).limit(args[:number]).all

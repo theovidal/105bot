@@ -7,12 +7,11 @@ module HundredFive
         USAGE = 'purge'
 
         def self.exec(context, _)
+          agenda = Models::Agendas.get(context)
           waiter = Classes::Waiter.new(context)
 
-          agenda = Models::Agendas.get(context, waiter)
-
           messages = Models::Messages.from_agenda(agenda[:snowflake]){date < Date.today}.all
-          Models::Messages.delete_many(messages, agenda)
+          Models::Messages.delete_many(context, messages, agenda)
 
           assignments = Models::Assignments.from_agenda(agenda[:snowflake]){date < Date.today}.all
           assignments.each { |assignment| assignment.delete }

@@ -14,10 +14,10 @@ module HundredFive
         }
 
         def self.exec(context, args)
-          waiter = Classes::Waiter.new(context)
+          agenda = Models::Agendas.get(context, false)
+          raise Classes::ExecutionError.new(nil, 'un agenda existe déjà dans ce salon.') unless agenda.nil?
 
-          agenda = Models::Agendas.get(context, waiter, false)
-          raise Classes::ExecutionError.new(waiter, 'un agenda existe déjà dans ce salon.') unless agenda.nil?
+          waiter = Classes::Waiter.new(context)
 
           snowflake = ::SF.next
           Models::Agendas.create do |agenda|

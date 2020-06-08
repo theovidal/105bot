@@ -27,9 +27,8 @@ module HundredFive
         end
 
         def self.confirm(context)
+          agenda = Models::Agendas.get(context)
           waiter = Classes::Waiter.new(context)
-
-          agenda = Models::Agendas.get(context, waiter)
 
           messages = Models::Messages.where(agenda: agenda[:snowflake]).all
           Models::Messages.delete_many(context, agenda, messages)

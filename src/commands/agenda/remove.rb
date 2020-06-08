@@ -28,6 +28,8 @@ module HundredFive
         }
 
         def self.exec(context, args)
+          agenda = Models::Agendas.get(context)
+
           args[:index] -= 1
 
           pretty_type = args[:type] == 'work' ? 'du devoir' : "de l'événement"
@@ -43,8 +45,6 @@ module HundredFive
           rescue ArgumentError
             raise Classes::ExecutionError.new(waiter, 'la date est incorrecte.')
           end
-
-          agenda = Models::Agendas.get(context, waiter)
 
           is_weekly = args[:type] == 'weekly_event'
           assignments = Models::Assignments.where(agenda: agenda[:snowflake])
