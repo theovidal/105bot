@@ -38,6 +38,14 @@ module HundredFive
       )
     end
 
+    def Utils.error(context, text)
+      context.message.delete
+      context.author.pm.send_embed('', Utils.embed(
+        description: text,
+        color: 12000284
+      ))
+    end
+
     def Utils.event_notification(client)
       events = Models::Assignments.upcoming_events
       unless events == []

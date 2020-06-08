@@ -22,7 +22,7 @@ module HundredFive
         type: {
           description: 'Type de la tâche : `work` pour un tavail ou devoir; `event` pour un événement; `weekly_event` pour un événement hebdomadaire',
           type: String,
-          default: 'homework'
+          default: 'work'
         },
         subject: {
           description: 'Sujet de la tâche',

@@ -18,23 +18,32 @@ module HundredFive
 
     # Trigger a command
     #
-    # @param commands [Array<String>] the commands and subcommands passed
-    # @param args [Array<String>] list of arguments passed to the command
     # @param context [Discordrb::Event::MessageEvent] the command context
-    def handle_command(commands, args, context)
+    # @param message [String] the message user sent
+    def handle_command(context, message)
       begin
         command = nil
+        args = ''
         sub = false
-        commands.each do |input|
-          command = sub ? command.subcommands[input] : @commands[input]
+
+        parts = message.split(' ')
+        parts.each.with_index do |part, index|
+          try_command = sub ? command.subcommands[part] : @commands[part]
           raise Classes::CommandParsingError.new(
-            "**:question: La commande #{CONFIG['bot']['prefix']}#{input} est inconnue.**\n\n" +
+            "**:question: La commande #{CONFIG['bot']['prefix']}#{message} est inconnue.**\n\n" +
             "Exécutez #{CONFIG['bot']['prefix']}help pour avoir la liste complète des commandes autorisées."
-          ) if command.nil?
-          args = [] if input == args[0]
-          input == commands[-1] ? break : sub = true
+          ) if try_command.nil? && !sub
+
+          break if try_command.nil? && sub
+
+          command = try_command
+          args_range = index + 1
+          args = parts[args_range..].join(' ') unless part == parts[args_range..]
+          sub = true
         end
-        p command
+
+        args = args.split(',')
+
         if context.channel.private?
           return unless command.listen.include?('private')
         else
@@ -76,24 +85,19 @@ module HundredFive
         end
         command.object.exec(context, parsed_args)
       rescue Classes::CommandParsingError => e
-        context.send_embed('', Utils.embed(
-          description: e.message,
-          color: 12000284
-        ))
+        Utils.error(context, e.message)
       rescue Classes::ArgumentError => e
-        context.author.pm.send_embed('', Utils.embed(
-          description:
-            "**#{CONFIG['messages']['error_emoji']} Erreur dans les arguments de la commande : #{e.message}**\n\n" +
-            "Pour en savoir plus sur les commandes et leurs arguments, exécutez `#{CONFIG['bot']['prefix']}help`.",
-          color: 12000284
-        ))
+        Utils.error(
+          context,
+          "**#{CONFIG['messages']['error_emoji']} Erreur dans les arguments de la commande : #{e.message}**\n\n" +
+          "Pour en savoir plus sur les commandes et leurs arguments, exécutez `#{CONFIG['bot']['prefix']}help`."
+        )
       rescue Classes::ExecutionError => e
         if e.waiter.nil?
-          context.author.pm.send_embed('', Utils.embed(
-            description:
-              "**#{CONFIG['messages']['error_emoji']} Erreur dans l'exécution de la commande : #{e.message}**",
-            color: 12000284
-          ))
+          Utils.error(
+            context,
+            "**#{CONFIG['messages']['error_emoji']} Erreur dans l'exécution de la commande : #{e.message}**"
+          )
         else
           e.waiter.error("Erreur dans l'exécution de la commande : #{e.message}")
         end

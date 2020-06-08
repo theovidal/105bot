@@ -29,12 +29,12 @@ module HundredFive
           description: "**#{text}**\n\n#{subtext}",
           color: CONFIG['messages']['error_color']
         ))
+        delete_message
       end
 
       private
 
       def set_reaction(emoji)
-        @message.delete_all_reactions unless @context.channel.private?
         @message.react(emoji)
       end
 

@@ -1,3 +1,5 @@
+require 'httparty'
+
 module HundredFive
   module Commands
     class Import < Command

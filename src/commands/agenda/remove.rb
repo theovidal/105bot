@@ -32,7 +32,10 @@ module HundredFive
         pretty_type = args[:type] == 'work' ? 'du devoir' : "de l'événement"
         waiter = Classes::Waiter.new(context)
 
-        raise Classes::ExecutionError.new(waiter, "le type `#{args[:type]}` est inconnu.") unless Models::Assignments::TYPES.include? args[:type]
+        raise Classes::ExecutionError.new(
+          waiter,
+          "le type `#{args[:type]}` est inconnu."
+        ) unless Models::Assignments::TYPES.include? args[:type]
 
         begin
           date = Date.new(2020, args[:month], args[:day])
@@ -46,7 +49,7 @@ module HundredFive
         assignments = Models::Assignments.where(agenda: agenda[:snowflake])
         assignments =
           is_weekly ? assignments.where(is_weekly: true).all
-          : Models::Assignments.from_day(agenda[:snowflake], date).select{ |a| a[:type] == args[:type] }
+          : Models::Assignments.from_day(agenda[:snowflake], date).where(type: args[:type]).all
 
         assignment = assignments[args[:index]]
         raise Classes::ExecutionError.new(waiter, "le numéro #{pretty_type} est incorrect.") if assignment.nil?

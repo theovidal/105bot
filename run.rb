@@ -29,9 +29,8 @@ Main do
       $bot = HundredFive::Bot.new(client)
 
       client.message(start_with: HundredFive::CONFIG['bot']['prefix']) do |event|
-        commands = event.content.delete_prefix(HundredFive::CONFIG['bot']['prefix']).split(' ')
-        args = commands[-1].gsub("\n", '\\n').split(',')
-        $bot.handle_command(commands, args, event)
+        message = event.content.delete_prefix(HundredFive::CONFIG['bot']['prefix']).gsub("\n", '\\n')
+        $bot.handle_command(event, message)
       end
 
       client.ready do
