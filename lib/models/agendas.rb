@@ -10,6 +10,10 @@ module HundredFive
 
         return agenda
       end
+
+      def self.get_by_id(agenda)
+        Models::Agendas.where(snowflake: agenda).first
+      end
     end
   end
 end

@@ -50,16 +50,14 @@ module HundredFive
       events = Models::Assignments.upcoming_events
       unless events == []
         events.each do |event|
-          subject = SUBJECTS[event[:subject]]
-          role = client.server(689125786460094548).role(subject['role'])
-          client.channel(CONFIG['server']['broadcast_channel']).send_embed(role.mention, Utils.embed(
+          agenda = Models::Agendas.get_by_id(event[:agenda])
+          text = ''
+          text << "#{event[:subject]} : " unless event[:subject].nil?
+          text << event[:text].gsub('\\n', "\n")
+          client.channel(agenda[:channel]).send_embed('@everyone', Utils.embed(
             title: ':bell: Un événement va débuter',
             url: event[:link],
-            color: role.color.combined,
-            description: "#{subject['emoji']} #{subject['name']} : #{event.text.gsub('\\n', "\n")}",
-            thumbnail: Discordrb::Webhooks::EmbedThumbnail.new(
-              url: subject['illustration']
-            )
+            description: text
           ))
         end
       end
