@@ -42,7 +42,7 @@ module HundredFive
 
         days = []
         6.times do |wday|
-          events = Assignments.where(is_weekly: 1).all.select{ |a| a[:date].wday == wday }
+          events = Assignments.from_agenda(agenda, true).all.select{ |a| a[:date].wday == wday }
           next if events.length == 0
 
           content = ''

@@ -24,8 +24,8 @@ module HundredFive
         Assignments.from_agenda(agenda).where(date: day)
       end
 
-      def self.from_agenda(agenda)
-        Assignments.where(agenda: agenda, is_weekly: false)
+      def self.from_agenda(agenda, is_weekly = false)
+        Assignments.where(agenda: agenda, is_weekly: is_weekly)
       end
 
       def self.upcoming_events
