@@ -37,7 +37,7 @@ module HundredFive
       end
 
       def self.refresh_weekly(context, agenda)
-        model = Models::Messages.where(agenda: agenda, weekly: true).first
+        model = Models::Messages.from_agenda(agenda, true).first
         msg = context.channel.message(model[:message])
 
         days = []
@@ -69,8 +69,8 @@ module HundredFive
         Messages.from_agenda(agenda).where(date: day).first
       end
 
-      def self.from_agenda(agenda)
-        Messages.where(agenda: agenda, weekly: false)
+      def self.from_agenda(agenda, weekly = false)
+        Messages.where(agenda: agenda, weekly: weekly)
       end
 
       def self.delete_many(context, agenda, messages)
