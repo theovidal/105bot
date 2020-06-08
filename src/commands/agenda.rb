@@ -1,6 +1,6 @@
 module HundredFive
   module Commands
-    class Agenda < Command
+    class AgendaCommand < Command
       DESC = 'Gérez un agenda sur Discord'
       LISTEN = %w[public private]
       SUBCOMMANDS = true

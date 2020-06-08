@@ -105,11 +105,13 @@ module HundredFive
     end
 
     # List all the commands
+    #
+    # @params base [String] the base path to load command
     def list_commands(base = 'commands')
       commands = {}
       Dir["src/#{base}/*.rb"].each do |path|
         resp = Regexp.new("([a-z0-9]+)\.rb$").match(path)
-        if resp != nil && resp[1] != 'command'
+        if resp != nil
           cmd_name = resp[1]
           cmd_path = "#{base}/#{cmd_name}"
           cmd = load_command(cmd_path)
@@ -131,11 +133,11 @@ module HundredFive
 
     # Load a command from the files
     #
-    # @param command [String] the command's name
-    def load_command(command)
-      require_relative "src/#{command}"
-      name = command.split('/')[-1]
-      eval("Commands::#{name.capitalize}")
+    # @param path [String] relative path into the file system to the command file
+    def load_command(path)
+      require_relative "src/#{path}"
+      command_module = path.split('/').map { |c| c.capitalize }.join('::')
+      eval("#{command_module}Command")
     end
   end
 end

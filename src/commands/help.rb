@@ -1,6 +1,6 @@
 module HundredFive
   module Commands
-    class Help < Command
+    class HelpCommand < Command
       DESC = "Obtenir de l'aide sur l'utilisation du robot"
       LISTEN = %w[private public]
 

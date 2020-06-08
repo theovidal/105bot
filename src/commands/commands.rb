@@ -1,6 +1,6 @@
 module HundredFive
   module Commands
-    class Commands < Command
+    class CommandsCommand < Command
       DESC = 'Obtenir la liste des commandes disponibles sur le robot'
       LISTEN = %w[private public]
 

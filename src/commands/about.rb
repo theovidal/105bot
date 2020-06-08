@@ -1,6 +1,6 @@
 module HundredFive
   module Commands
-    class About < Command
+    class AboutCommand < Command
       DESC = 'Obtenir les informations pratiques du robot'
       USAGE = 'about'
       LISTEN = %w[private public]

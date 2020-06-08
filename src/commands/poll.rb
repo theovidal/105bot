@@ -1,6 +1,6 @@
 module HundredFive
   module Commands
-    class Poll < Command
+    class PollCommand < Command
       DESC = 'Lancer un sondage grâce aux réactions de Discord'
       CATEGORY = 'notes'
       ARGS = {

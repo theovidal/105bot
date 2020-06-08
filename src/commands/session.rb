@@ -1,6 +1,6 @@
 module HundredFive
   module Commands
-    class Session < Command
+    class SessionCommand < Command
       DESC = 'Démarrer une session de participation sur Discord'
       CATEGORY = 'notes'
 
