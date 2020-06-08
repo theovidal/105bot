@@ -4,7 +4,8 @@
       alt="icon"
       width="200"/>
     <h1>105bot</h1>
-    <h3>📆 Collaborative agenda on Discord 🤖</h3>
+    <h3>📌 Organization tools on Discord 🤖</h3>
+    <a href="https://discord.com/api/oauth2/authorize?client_id=690904891929133190&permissions=161856&scope=bot">Invite</a> - <a href="https://discord.gg/QGGSTXy">Discord server</a> - <a href="https://trello.com/b/vEAgMsG0/105bot">Trello</a>
 </div>
 
 ## 📖 Table of Contents
@@ -23,19 +24,36 @@
 
 ## 🌈 Features
 
-- Write in a single place homework in different subjects
-- Program events and receive a notification when they start
+### Agenda
+
+- Write in a single place work with a text, link and even a subject
+- Program events and receive notifications when they start
 - Add weekly events, that repeat themselves on a specific day, and still get benefit of notifications
 - Let many people maintain a single agenda - Stay organized collectively!
 
 TL;DR: an agenda with work and events on Discord!
 
-### Screenshots
-
 ![screenshot1](./assets/screenshot1.png)
 ![screenshot2](./assets/screenshot2.png)
 ![screenshot3](./assets/screenshot3.png)
 ![screenshot4](./assets/screenshot4.png)
+
+### Sessions
+
+- Start a dynamic vocal session on Discord
+- Get notified with a voice message when someone wants to participate
+- Let users react based on their feelings
+
+This feature is a lot inspired from BlackBoard Collaborate, a tool that I used for class during COVID-19 lock-down.
+
+### Annotations
+
+- Add a note and files to a message
+
+### Polls
+
+- Start a poll in any channel, proposing a variety of options (up to 20, which is the Discord reactions number limit)
+- Choose from a variety of reactions : letters, numbers, shapes, and even food, transportation, animals and faces!
 
 ## 👨‍💼 User guide
 
@@ -89,7 +107,8 @@ require_relative 'command'
 module HundredFive
   module Commands
     class Example < Command
-      DESC = "Some description to show in the help message."
+      DESC = 'Some description to show in the help message.'
+      CATEGORY = 'Category of the command'
       ARGS = {
         type: {
           description: 'Every argument has a type - here, Integer - and a default value.',
@@ -114,12 +133,12 @@ end
 Inside the command :
 
 - the `context` is the [Discordrb::EventsMessageEvent class](https://rubydoc.info/github/meew0/discordrb/Discordrb/Events/MessageEvent), in order to access message, channel, user, bot...
-- the `args` is a hash containing arguments you asked, with their default values if the
+- the `args` is a hash containing arguments you asked with the exact same key
 
 ## 📜 Credits
 
-- Library : [discordrb](https://github.com/meew0/discordrb)
-- Maintainer : [Exybore](https://github.com/exybore)
+- Libraries : [discordrb](https://github.com/meew0/discordrb), [pronote-api](https://github.com/Litarvan/pronote-api)
+- Maintainer : [Théo Vidal](https://github.com/exybore)
 
 ## 🔐 License
 
