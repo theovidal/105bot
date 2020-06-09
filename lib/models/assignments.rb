@@ -12,7 +12,7 @@ module HundredFive
         output = "• "
         output << "#{assignment[:subject]} : " unless assignment[:subject].nil?
         output << "#{assignment[:text].gsub('\\n', "\n")} #{due}\n"
-        output << "#{assignment[:link]}\n" unless assignment[:link] == nil
+        output << "[Accéder](#{assignment[:link]})\n" unless assignment[:link] == nil
 
         output
       end

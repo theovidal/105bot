@@ -26,11 +26,13 @@ module HundredFive
           fields: [
             Discordrb::Webhooks::EmbedField.new(
               name: ':bell: Évenements',
-              value: events
+              value: events,
+              inline: true
             ),
             Discordrb::Webhooks::EmbedField.new(
               name: ':clipboard: Travaux',
-              value: homework
+              value: homework,
+              inline: true
             )
           ]
         ))

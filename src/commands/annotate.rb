@@ -42,12 +42,12 @@ module HundredFive
 
         source_files = ''
         message.attachments.each do |file|
-          source_files << "#{file.filename} : #{file.url}\n"
+          source_files << "[#{file.filename}](#{file.url})\n"
         end
 
         sent_files = ''
         context.message.attachments.each do |file|
-          sent_files << "#{file.filename} : #{file.url}\n"
+          sent_files << "[#{file.filename}](#{file.url})\n"
         end
 
         fields = []
