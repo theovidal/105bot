@@ -1,7 +1,4 @@
 .vscode
 .idea
 *.sqlite
-data/config.yml
-data/import_subjects.yml
-data/subjects.yml
-data/strings.yml
+config.dev.yml

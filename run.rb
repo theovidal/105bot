@@ -3,22 +3,23 @@ require 'date'
 require 'main'
 require 'snowflake-rb'
 
-require_relative 'lib/utils'
 require_relative 'lib/data'
+require_relative 'lib/utils'
+
+unless File.file?(HundredFive::CONFIG['db']['path'])
+  File.new(HundredFive::CONFIG['db']['path'], 'w+')
+end
 
 DB = Sequel.sqlite(HundredFive::CONFIG['db']['path'])
 SF = Snowflake::Rb.snowflake(1, 1)
 
 require_relative 'core'
 
-Main do
-  mode 'start' do
-    def run
       require 'discordrb'
       require 'timeloop'
 
       client = Discordrb::Bot.new(
-        token: HundredFive::CONFIG['bot']['token'],
+        token: ENV['DISCORD_TOKEN'],
         log_mode: HundredFive::CONFIG['bot']['debug'] ? :debug : :quiet,
         name: HundredFive::CONFIG['meta']['name'],
         client_id: HundredFive::CONFIG['meta']['client_id']
@@ -59,6 +60,3 @@ Main do
       end
 
       client.run
-    end
-  end
-end

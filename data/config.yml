@@ -1,0 +1,36 @@
+bot:
+  debug: false
+  refresh_interval: 6007
+  prefix: "105:"
+pronote:
+  api: http://localhost:21727
+messages:
+  color: 7976509
+  wait_color: 2400200
+  error_color: 12000284
+  finished_emoji: ':white_check_mark:'
+  error_emoji: ':x:'
+  day_colors:
+    - 11943229
+    - 11974205
+    - 6075965
+    - 4044416
+    - 4027318
+    - 5258678
+    - 11943344
+meta:
+  name: 105bot
+  client_id: 690904891929133190
+  status: '105:help'
+  status_type: 3 # See DiscordRB documentation
+  version: 1.0.0-beta4
+  illustration: https://cdn.discordapp.com/app-icons/719596279356719194/fe6f850f6617a7fabbc40bcee38de408.png?size=512
+  link: https://github.com/theovidal/105bot
+db:
+  path: ./105bot.sqlite
+server:
+  roles: [
+    690904299152212039, 689132006705201390, # 1°5
+    717783951007023245, 717784615569588255, 717784280088182846, # Exy'BotDev
+    689130930501058642, 689166326903865446, 689218012418539574, 690461700394057779, 689778468946313276 # Lycée virtuel
+  ]
