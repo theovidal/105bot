@@ -4,7 +4,7 @@ require_relative 'storage'
 module HundredFive
   CATEGORIES = load_yml('categories')
 
-  CONFIG = load_yml('config')
+  CONFIG = load_config()
 
   strings = load_yml('strings')
 
