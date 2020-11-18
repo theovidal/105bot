@@ -24,7 +24,7 @@ meta:
   status: '105:help'
   status_type: 3 # See DiscordRB documentation
   version: 1.0.0-beta4
-  illustration: https://cdn.discordapp.com/app-icons/719596279356719194/fe6f850f6617a7fabbc40bcee38de408.png?size=512
+  illustration: https://cdn.discordapp.com/app-icons/690904891929133190/8a34d159d26173ca6fbd0f5fa368aa29.png?size=512
   link: https://github.com/theovidal/105bot
 db:
   path: ./105bot.sqlite
