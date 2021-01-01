@@ -41,7 +41,7 @@ module HundredFive
           ) unless Models::Assignments::TYPES.include? args[:type]
 
           begin
-            date = Date.new(2020, args[:month], args[:day])
+            date = Date.new(2021, args[:month], args[:day])
           rescue ArgumentError
             raise Classes::ExecutionError.new(waiter, 'la date est incorrecte.')
           end

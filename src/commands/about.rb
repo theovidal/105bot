@@ -16,7 +16,7 @@ module HundredFive
             ":bookmark_tabs: [Code source](#{CONFIG['meta']['link']})\n" +
             ":computer: Mainteneur : [Théo Vidal](https://twitter.com/exybore)\n\n" +
 
-            ":copyright: 2020, Théo Vidal. Sous licence [GNU GPL v3](https://github.com/exybore/105bot/blob/master/LICENSE)",
+            ":copyright: 2021, Théo Vidal. Sous licence [GNU GPL v3](https://github.com/exybore/105bot/blob/master/LICENSE)",
           thumbnail: Discordrb::Webhooks::EmbedThumbnail.new(
             url: CONFIG['meta']['illustration']
           )

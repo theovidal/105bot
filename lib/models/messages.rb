@@ -66,7 +66,7 @@ module HundredFive
 
       def self.from_day(agenda, day)
         if day.is_a? Array
-          day = Date.new(2020, day[1], day[0])
+          day = Date.new(2021, day[1], day[0])
         end
         Messages.from_agenda(agenda).where(date: day).first
       end
